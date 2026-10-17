@@ -1,0 +1,14 @@
+# 统一使用 LF，避免跨平台换行符抖动
+* text=auto eol=lf
+
+# 二进制资源不参与文本转换
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.zip binary
+
+# 自动化产物不参与 diff 统计
+*.md linguist-documentation
+examples/*.json linguist-language=JSON
