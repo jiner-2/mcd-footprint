@@ -1,0 +1,173 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>麦麦足迹 · 分享卡</title><style>
+:root{
+  --bg:#faf8f5; --card:#fffdfb; --ink:#2b2320; --ink2:#6f625a; --ink3:#a3968d;
+  --line:#efe7df; --brand:#DA291C; --brand-d:#a8160d; --gold:#f0b429; --brown:#8c3a2b;
+  --shadow:0 1px 2px rgba(80,50,40,.04), 0 8px 24px rgba(80,50,40,.05);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg); color:var(--ink); line-height:1.65;
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:920px;margin:0 auto;padding:40px 20px 96px}
+
+/* ---------- 页头 ---------- */
+.masthead{margin-bottom:28px}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--brand);font-weight:700;margin-bottom:12px;
+}
+.eyebrow::before{content:"";width:22px;height:2px;background:var(--brand);border-radius:2px}
+h1{font-size:34px;line-height:1.25;letter-spacing:-.5px;font-weight:800;margin-bottom:10px}
+h1 .accent{background:linear-gradient(100deg,var(--brand),var(--brown));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.lede{font-size:15px;color:var(--ink2);max-width:640px}
+.lede b{color:var(--ink);font-weight:700}
+
+/* ---------- 通用卡片 ---------- */
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:var(--shadow);margin-bottom:18px}
+.panel h2{font-size:15px;font-weight:800;letter-spacing:.02em;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.panel h2 .dot{width:7px;height:7px;border-radius:50%;background:var(--brand);flex:none}
+.panel .sub{font-size:12.5px;color:var(--ink3);margin-bottom:18px}
+
+/* ---------- Hero 数字 ---------- */
+.hero{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.hero .cell{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 16px;box-shadow:var(--shadow)}
+.hero .num{font-size:26px;font-weight:800;letter-spacing:-.5px;line-height:1.2;font-variant-numeric:tabular-nums}
+.hero .num small{font-size:13px;font-weight:700;color:var(--ink3);margin-left:3px}
+.hero .cap{font-size:12px;color:var(--ink3);margin-top:6px}
+.hero .cell.hi{background:linear-gradient(150deg,#fff6f4,#fffdfb);border-color:#f6ded8}
+.hero .cell.hi .num{color:var(--brand)}
+
+/* ---------- 亮点 ---------- */
+.highlights{display:flex;flex-direction:column;gap:10px}
+.highlights li{list-style:none;display:flex;gap:10px;font-size:14px;color:var(--ink2)}
+.highlights li::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--gold);margin-top:9px;flex:none}
+.highlights li b{color:var(--ink);font-weight:700}
+
+/* ---------- 时间热力 ---------- */
+.heat{display:grid;grid-template-columns:58px repeat(6,1fr);gap:5px}
+.heat .hd{font-size:11.5px;color:var(--ink3);text-align:center;padding-bottom:4px;font-weight:600}
+.heat .rl{font-size:11.5px;color:var(--ink3);display:flex;align-items:center;font-weight:600}
+.heat .cl{height:38px;border-radius:7px;display:flex;align-items:center;justify-content:center;
+  font-size:12.5px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--ink3)}
+.heat .cl.on{color:#fff}
+.heat-legend{display:flex;align-items:center;gap:8px;margin-top:14px;font-size:11.5px;color:var(--ink3)}
+.heat-legend .sw{width:16px;height:12px;border-radius:3px}
+
+/* ---------- 柱状（月度） ---------- */
+.months{display:flex;align-items:flex-end;gap:14px;height:150px;padding-top:8px}
+.month-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:6px}
+.month-bar{width:100%;max-width:52px;border-radius:8px 8px 3px 3px;
+  background:linear-gradient(180deg,var(--brand),#e8574a);min-height:4px;position:relative}
+.month-bar span{position:absolute;top:-19px;left:0;right:0;text-align:center;font-size:11.5px;font-weight:700;color:var(--ink2)}
+.month-cap{font-size:11.5px;color:var(--ink3);font-weight:600}
+
+/* ---------- 条形 ---------- */
+.bars{display:flex;flex-direction:column;gap:11px}
+.bar-row{display:grid;grid-template-columns:104px 1fr 128px;align-items:center;gap:12px}
+.bar-name{font-size:13px;font-weight:600;color:var(--ink)}
+.bar-track{height:12px;border-radius:6px;background:#f3ece6;overflow:hidden}
+.bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--brand),#ec6a52)}
+.bar-fill.gold{background:linear-gradient(90deg,var(--gold),#f6cd6a)}
+.bar-val{font-size:12.5px;color:var(--ink3);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* ---------- 城市 ---------- */
+.cities{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.city{border:1px solid var(--line);border-radius:13px;padding:15px 16px;background:#fffefd}
+.city .top{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:6px}
+.city .name{font-size:15px;font-weight:800}
+.city .badge{font-size:11.5px;font-weight:700;color:var(--brand);background:#fdeeeb;border-radius:20px;padding:2px 9px;white-space:nowrap}
+.city .meta{font-size:12px;color:var(--ink3);margin-bottom:8px}
+.city .store{font-size:12.5px;color:var(--ink2);line-height:1.5}
+.city .store b{color:var(--ink);font-weight:600}
+.city .spend{font-size:12px;color:var(--ink3);margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)}
+
+/* ---------- 麦金卡 ---------- */
+.ledger{background:linear-gradient(140deg,#2f2622,#4a352c);color:#f7efe7;border:none;border-radius:16px;padding:26px;box-shadow:var(--shadow)}
+.ledger h2{color:#fff}
+.ledger h2 .dot{background:var(--gold)}
+.ledger .sub{color:#c4b3a6}
+.ledger-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:6px}
+.ledger-grid .k{font-size:11.5px;color:#c4b3a6;margin-bottom:4px}
+.ledger-grid .v{font-size:21px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.3px}
+.ledger-grid .v.good{color:#7fdc9a}
+.ledger-grid .v.bad{color:#f2a08f}
+.ledger .verdict{margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,.14);font-size:14px;color:#e8dcd2}
+.ledger .verdict b{color:var(--gold)}
+
+/* ---------- 口径 ---------- */
+.notes{list-style:none;display:flex;flex-direction:column;gap:8px}
+.notes li{font-size:12.5px;color:var(--ink2);line-height:1.6;padding-left:16px;position:relative}
+.notes li::before{content:"·";position:absolute;left:4px;color:var(--ink3);font-weight:800}
+.notes li b{color:var(--ink);font-weight:700}
+.warns{list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.warns li{font-size:12.5px;padding:10px 13px;border-radius:9px;line-height:1.6}
+.warns li.warn{background:#fdf7e8;color:#8a6a19;border:1px solid #f5e6bd}
+.warns li.error{background:#fdeeeb;color:#a8331f;border:1px solid #f6d8d2}
+.warns li b{font-weight:800}
+.ok-line{font-size:12.5px;color:#3e7d55;background:#eef8f1;border:1px solid #d6ecdd;border-radius:9px;padding:10px 13px}
+
+/* ---------- 分享卡 ---------- */
+.card-section{margin-top:26px}
+.card-hint{font-size:12.5px;color:var(--ink3);margin-bottom:12px}
+.card-scroll{overflow:auto;border-radius:18px}
+.share-card{
+  width:1080px;min-height:1920px;zoom:.5;
+  background:linear-gradient(170deg,#fffdfa 0%,#faf4ec 58%,#f6ece2 100%);
+  padding:96px 76px;display:flex;flex-direction:column;gap:48px;
+  position:relative;overflow:hidden;border:1px solid #eadfd2;border-radius:18px;
+}
+.share-card::before{content:"";position:absolute;top:-180px;right:-160px;width:620px;height:620px;border-radius:50%;
+  background:radial-gradient(circle,rgba(218,41,28,.10),rgba(218,41,28,0) 68%)}
+.share-card::after{content:"";position:absolute;bottom:-200px;left:-140px;width:520px;height:520px;border-radius:50%;
+  background:radial-gradient(circle,rgba(240,180,41,.14),rgba(240,180,41,0) 70%)}
+.sc-brand{font-size:20px;font-weight:800;letter-spacing:.18em;color:var(--brand);text-transform:uppercase;position:relative}
+.sc-title{font-size:70px;font-weight:900;letter-spacing:-2px;line-height:1.1;position:relative}
+.sc-title em{font-style:normal;background:linear-gradient(100deg,var(--brand),var(--brown));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.sc-sub{font-size:24px;color:var(--ink2);position:relative;margin-top:-18px}
+.sc-nums{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;position:relative}
+.sc-num{background:rgba(255,255,255,.72);border:1px solid #efe2d4;border-radius:20px;padding:22px 24px}
+.sc-num .n{font-size:48px;font-weight:900;letter-spacing:-1.5px;font-variant-numeric:tabular-nums;line-height:1.1}
+.sc-num .n small{font-size:22px;font-weight:800;color:var(--ink3);margin-left:4px}
+.sc-num .c{font-size:19px;color:var(--ink3);margin-top:4px}
+.sc-num.hi .n{color:var(--brand)}
+.sc-block{position:relative}
+.sc-block-t{font-size:19px;font-weight:800;color:var(--ink2);margin-bottom:14px;letter-spacing:.02em}
+.sc-heat{display:grid;grid-template-columns:76px repeat(6,1fr);gap:7px}
+.sc-heat .c{height:34px;border-radius:7px}
+.sc-heat .l{font-size:16px;color:var(--ink3);display:flex;align-items:center;font-weight:600}
+.sc-chips{display:flex;flex-wrap:wrap;gap:11px}
+.sc-chip{font-size:21px;padding:9px 20px;border-radius:999px;background:rgba(218,41,28,.09);
+  color:var(--brand-d);font-weight:700;border:1px solid rgba(218,41,28,.16)}
+.sc-chip.plain{background:rgba(240,180,41,.14);color:#8a6412;border-color:rgba(240,180,41,.3)}
+.sc-items{display:flex;gap:14px}
+.sc-item{flex:1;background:rgba(255,255,255,.72);border:1px solid #efe2d4;border-radius:16px;padding:16px 18px}
+.sc-item .r{font-size:15px;font-weight:800;color:var(--gold)}
+.sc-item .nm{font-size:24px;font-weight:800;margin:4px 0 2px;line-height:1.25}
+.sc-item .q{font-size:17px;color:var(--ink3)}
+.sc-ledger{background:linear-gradient(120deg,#2f2622,#4a352c);border-radius:20px;padding:26px 30px;color:#f7efe7;
+  display:flex;align-items:center;justify-content:space-between;gap:24px}
+.sc-ledger .t{font-size:19px;color:#c4b3a6;margin-bottom:6px}
+.sc-ledger .m{font-size:34px;font-weight:900;letter-spacing:-.8px}
+.sc-ledger .m b{color:var(--gold)}
+.sc-ledger .r{text-align:right;font-size:19px;color:#c4b3a6;line-height:1.5}
+.sc-ledger .r b{color:#7fdc9a;font-size:26px;font-weight:900;display:block}
+.sc-foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;
+  font-size:17px;color:var(--ink3);padding-top:20px;border-top:1px solid #eadfd2;position:relative}
+.sc-foot b{color:var(--brand);font-weight:800}
+
+.foot{text-align:center;font-size:12px;color:var(--ink3);margin-top:40px;line-height:1.9}
+
+@media (max-width:760px){
+  h1{font-size:26px}
+  .hero{grid-template-columns:repeat(2,1fr)}
+  .bar-row{grid-template-columns:84px 1fr;gap:8px 10px}
+  .bar-val{grid-column:2;text-align:left}
+  .ledger-grid{grid-template-columns:repeat(2,1fr)}
+  .heat{grid-template-columns:44px repeat(6,1fr);gap:3px}
+  .heat .cl{height:32px;font-size:11px}
+  .share-card{zoom:.32}
+}
+</style></head><body style="background:#efe7dd;display:flex;align-items:flex-start;justify-content:center;min-height:100vh;padding:40px 20px"><div class="share-card" style="zoom:1"><div class="sc-brand">MCD · Footprint</div><div class="sc-title">我的<em>麦当劳</em>足迹</div><div class="sc-sub">2026-07-06 ~ 2026-10-11 · 共 97 天</div><div class="sc-nums"><div class="sc-num hi"><div class="n">37<small>单</small></div><div class="c">累计订单</div></div><div class="sc-num"><div class="n">¥1,661.00</div><div class="c">总消费</div></div><div class="sc-num"><div class="n">7<small>城</small></div><div class="c">足迹城市</div></div><div class="sc-num"><div class="n">13<small>家</small></div><div class="c">吃过门店</div></div></div><div class="sc-block"><div class="sc-block-t">一周吃麦当劳的时间分布</div><div class="sc-heat"><div class="l"></div><div class="l" style="justify-content:center;font-size:14px">深夜</div><div class="l" style="justify-content:center;font-size:14px">早餐</div><div class="l" style="justify-content:center;font-size:14px">午市</div><div class="l" style="justify-content:center;font-size:14px">下午茶</div><div class="l" style="justify-content:center;font-size:14px">晚市</div><div class="l" style="justify-content:center;font-size:14px">夜宵</div><div class="l">周一</div><div class="c" style="background:rgba(218,41,28,0.045)"></div><div class="c" style="background:rgba(218,41,28,0.045)"></div><div class="c" style="background:rgba(218,41,28,0.660)"></div><div class="c" style="background:rgba(218,41,28,0.045)"></div><div class="c" style="background:rgba(218,41,28,0.270)"></div><div class="c" style="background:rgba(218,41,28,0.045)"></div><div class="l">周二</div><div class="c" style="background:rgba(218,41,28,0.045)"></div><div class="c" style="background:rgba(218,41,28,0.270)"></div><div class="c" style="background:rgba(218,41,28,0.530)"></div><div class="c" style="background:rgba(218,41,28,0.045)"></div><div class="c" style="background:rgba(218,41,28,0.400)"></div><div class="c" style="background:rgba(218,41,28,0.045)"></div><div class="l">周三</div><div class="c" style="background:rgba(218,41,28,0.045)"></div><div class="c" style="background:rgba(218,41,28,0.045)"></div><div class="c" style="background:rgba(218,41,28,0.660)"></div><div class="c" style="background:rgba(218,41,28,0.045)"></div><div class="c" style="background:rgba(218,41,28,0.270)"></div><div class="c" style="background:rgba(218,41,28,0.045)"></div><div class="l">周四</div><div class="c" style="background:rgba(218,41,28,0.045)"></div><div class="c" style="background:rgba(218,41,28,0.400)"></div><div class="c" style="background:rgba(218,41,28,0.790)"></div><div class="c" style="background:rgba(218,41,28,0.045)"></div><div class="c" style="background:rgba(218,41,28,0.045)"></div><div class="c" style="background:rgba(218,41,28,0.045)"></div><div class="l">周五</div><div class="c" style="background:rgba(218,41,28,0.045)"></div><div class="c" style="background:rgba(218,41,28,0.045)"></div><div class="c" style="background:rgba(218,41,28,0.920)"></div><div class="c" style="background:rgba(218,41,28,0.045)"></div><div class="c" style="background:rgba(218,41,28,0.045)"></div><div class="c" style="background:rgba(218,41,28,0.045)"></div><div class="l">周六</div><div class="c" style="background:rgba(218,41,28,0.045)"></div><div class="c" style="background:rgba(218,41,28,0.045)"></div><div class="c" style="background:rgba(218,41,28,0.400)"></div><div class="c" style="background:rgba(218,41,28,0.400)"></div><div class="c" style="background:rgba(218,41,28,0.270)"></div><div class="c" style="background:rgba(218,41,28,0.400)"></div><div class="l">周日</div><div class="c" style="background:rgba(218,41,28,0.045)"></div><div class="c" style="background:rgba(218,41,28,0.270)"></div><div class="c" style="background:rgba(218,41,28,0.045)"></div><div class="c" style="background:rgba(218,41,28,0.045)"></div><div class="c" style="background:rgba(218,41,28,0.045)"></div><div class="c" style="background:rgba(218,41,28,0.045)"></div></div></div><div class="sc-block"><div class="sc-block-t">足迹城市</div><div class="sc-chips"><span class="sc-chip">上海市 · 27 单</span><span class="sc-chip">北京市 · 3 单</span><span class="sc-chip plain">深圳市 · 2 单</span><span class="sc-chip plain">杭州市 · 2 单</span><span class="sc-chip plain">苏州市 · 1 单</span><span class="sc-chip plain">成都市 · 1 单</span><span class="sc-chip plain">南京市 · 1 单</span></div></div><div class="sc-block"><div class="sc-block-t">常点单品 TOP 3</div><div class="sc-items"><div class="sc-item"><div class="r">NO.1</div><div class="nm">可口可乐(中)</div><div class="q">26 份 · 23 单</div></div><div class="sc-item"><div class="r">NO.2</div><div class="nm">中薯条</div><div class="q">25 份 · 22 单</div></div><div class="sc-item"><div class="r">NO.3</div><div class="nm">巨无霸</div><div class="q">13 份 · 10 单</div></div></div></div><div class="sc-ledger"><div><div class="t">持卡 3 个月，省下</div><div class="m"><b>¥117.50</b></div></div><div class="r">净赚<b>¥60.50</b>2.06 倍回本</div></div><div class="sc-foot"><span>数据源：麦当劳中国 MCP · order-list</span><span><b>mcd-footprint</b></span></div></div></body></html>

@@ -1,0 +1,712 @@
+{
+  "schema_version": 1,
+  "source": {
+    "provider": "McDonald's China MCP",
+    "endpoint": "https://mcp.mcd.cn",
+    "tools_used": ["now-time-info", "order-list", "query-order"],
+    "fetched_at": "2026-10-12T20:00:00+08:00",
+    "timezone_assumption": "+08:00",
+    "note": "这是脱敏示例数据，用于演示与测试，不含任何真实订单、真实门店编码或个人信息。真实使用时由 order-list + query-order 现场拉取。"
+  },
+  "orders": [
+    {
+      "order_id": "MC2607060001",
+      "order_time": "2026-07-06 12:18:00",
+      "channel": "到店取餐",
+      "store": {
+        "store_code": "SH0021",
+        "store_name": "麦当劳(人民广场店)",
+        "address": "上海市黄浦区南京西路228号"
+      },
+      "items": [
+        {"name": "巨无霸", "quantity": 1, "amount_fen": 2500},
+        {"name": "中薯条", "quantity": 1, "amount_fen": 1250},
+        {"name": "可口可乐(中)", "quantity": 1, "amount_fen": 1100}
+      ],
+      "subtotal_fen": 4850,
+      "discount_fen": 0,
+      "total_fen": 4850,
+      "meal_card": null
+    },
+    {
+      "order_id": "MC2607090002",
+      "order_time": "2026-07-09 12:41:00",
+      "channel": "到店取餐",
+      "store": {
+        "store_code": "SH0114",
+        "store_name": "麦当劳(静安寺店)",
+        "address": "上海市静安区愚园路68号"
+      },
+      "items": [
+        {"name": "麦香鸡", "quantity": 1, "amount_fen": 1400},
+        {"name": "中薯条", "quantity": 1, "amount_fen": 1250},
+        {"name": "可口可乐(中)", "quantity": 1, "amount_fen": 1100}
+      ],
+      "subtotal_fen": 3750,
+      "discount_fen": 0,
+      "total_fen": 3750,
+      "meal_card": null
+    },
+    {
+      "order_id": "MC2607130003",
+      "order_time": "2026-07-13 18:52:00",
+      "channel": "麦乐送",
+      "store": {
+        "store_code": "SH0207",
+        "store_name": "麦当劳(徐家汇店)",
+        "address": "上海市徐汇区肇嘉浜路1065号"
+      },
+      "items": [
+        {"name": "双层吉士汉堡", "quantity": 1, "amount_fen": 1900},
+        {"name": "大薯条", "quantity": 1, "amount_fen": 1450},
+        {"name": "可口可乐(大)", "quantity": 1, "amount_fen": 1250}
+      ],
+      "subtotal_fen": 4600,
+      "discount_fen": 0,
+      "total_fen": 4600,
+      "meal_card": null
+    },
+    {
+      "order_id": "MC2607160004",
+      "order_time": "2026-07-16 12:05:00",
+      "channel": "到店取餐",
+      "store": {
+        "store_code": "SH0021",
+        "store_name": "麦当劳(人民广场店)",
+        "address": "上海市黄浦区南京西路228号"
+      },
+      "items": [
+        {"name": "麦辣鸡腿汉堡", "quantity": 1, "amount_fen": 2200},
+        {"name": "中薯条", "quantity": 1, "amount_fen": 1250},
+        {"name": "可口可乐(中)", "quantity": 1, "amount_fen": 1100}
+      ],
+      "subtotal_fen": 4550,
+      "discount_fen": 0,
+      "total_fen": 4550,
+      "meal_card": null
+    },
+    {
+      "order_id": "MC2607210005",
+      "order_time": "2026-07-21 12:33:00",
+      "channel": "到店取餐",
+      "store": {
+        "store_code": "SH0331",
+        "store_name": "麦当劳(陆家嘴店)",
+        "address": "上海市浦东新区世纪大道1号"
+      },
+      "items": [
+        {"name": "巨无霸", "quantity": 1, "amount_fen": 2500},
+        {"name": "中薯条", "quantity": 1, "amount_fen": 1250},
+        {"name": "雪碧(中)", "quantity": 1, "amount_fen": 1100}
+      ],
+      "subtotal_fen": 4850,
+      "discount_fen": 0,
+      "total_fen": 4850,
+      "meal_card": null
+    },
+    {
+      "order_id": "MC2607250006",
+      "order_time": "2026-07-25 15:20:00",
+      "channel": "到店取餐",
+      "store": {
+        "store_code": "SH0152",
+        "store_name": "麦当劳(中山公园店)",
+        "address": "上海市长宁区长宁路1018号"
+      },
+      "items": [
+        {"name": "麦咖啡拿铁", "quantity": 1, "amount_fen": 2200},
+        {"name": "麦旋风(奥利奥)", "quantity": 1, "amount_fen": 1300}
+      ],
+      "subtotal_fen": 3500,
+      "discount_fen": 0,
+      "total_fen": 3500,
+      "meal_card": null
+    },
+    {
+      "order_id": "MC2607300007",
+      "order_time": "2026-07-30 12:47:00",
+      "channel": "到店取餐",
+      "store": {
+        "store_code": "SH0021",
+        "store_name": "麦当劳(人民广场店)",
+        "address": "上海市黄浦区南京西路228号"
+      },
+      "items": [
+        {"name": "原味板烧鸡腿堡", "quantity": 1, "amount_fen": 2300},
+        {"name": "中薯条", "quantity": 1, "amount_fen": 1250},
+        {"name": "零度可乐(中)", "quantity": 1, "amount_fen": 1100}
+      ],
+      "subtotal_fen": 4650,
+      "discount_fen": 0,
+      "total_fen": 4650,
+      "meal_card": null
+    },
+    {
+      "order_id": "MC2608030008",
+      "order_time": "2026-08-03 12:12:00",
+      "channel": "到店取餐",
+      "store": {
+        "store_code": "SH0114",
+        "store_name": "麦当劳(静安寺店)",
+        "address": "上海市静安区愚园路68号"
+      },
+      "items": [
+        {"name": "原味板烧鸡腿堡", "quantity": 1, "amount_fen": 2300},
+        {"name": "中薯条", "quantity": 1, "amount_fen": 1250},
+        {"name": "可口可乐(中)", "quantity": 1, "amount_fen": 1100}
+      ],
+      "subtotal_fen": 4650,
+      "discount_fen": 400,
+      "total_fen": 4250,
+      "meal_card": {"applied": true, "card_name": "麦金卡", "saved_fen": 400}
+    },
+    {
+      "order_id": "MC2608060009",
+      "order_time": "2026-08-06 09:35:00",
+      "channel": "到店取餐",
+      "store": {
+        "store_code": "SH0021",
+        "store_name": "麦当劳(人民广场店)",
+        "address": "上海市黄浦区南京西路228号"
+      },
+      "items": [
+        {"name": "猪柳蛋麦满分", "quantity": 1, "amount_fen": 1500},
+        {"name": "薯饼", "quantity": 1, "amount_fen": 700},
+        {"name": "豆浆", "quantity": 1, "amount_fen": 900}
+      ],
+      "subtotal_fen": 3100,
+      "discount_fen": 300,
+      "total_fen": 2800,
+      "meal_card": {"applied": true, "card_name": "麦金卡", "saved_fen": 300}
+    },
+    {
+      "order_id": "MC2608080010",
+      "order_time": "2026-08-08 22:10:00",
+      "channel": "麦乐送",
+      "store": {
+        "store_code": "SH0021",
+        "store_name": "麦当劳(人民广场店)",
+        "address": "上海市黄浦区南京西路228号"
+      },
+      "items": [
+        {"name": "麦乐鸡(10块)", "quantity": 1, "amount_fen": 2400},
+        {"name": "可口可乐(大)", "quantity": 1, "amount_fen": 1250}
+      ],
+      "subtotal_fen": 3650,
+      "discount_fen": 350,
+      "total_fen": 3300,
+      "meal_card": {"applied": true, "card_name": "麦金卡", "saved_fen": 350}
+    },
+    {
+      "order_id": "MC2608110011",
+      "order_time": "2026-08-11 12:26:00",
+      "channel": "到店取餐",
+      "store": {
+        "store_code": "SH0021",
+        "store_name": "麦当劳(人民广场店)",
+        "address": "上海市黄浦区南京西路228号"
+      },
+      "items": [
+        {"name": "巨无霸", "quantity": 1, "amount_fen": 2500},
+        {"name": "麦乐鸡(5块)", "quantity": 1, "amount_fen": 1300},
+        {"name": "可口可乐(中)", "quantity": 1, "amount_fen": 1100}
+      ],
+      "subtotal_fen": 4900,
+      "discount_fen": 400,
+      "total_fen": 4500,
+      "meal_card": {"applied": true, "card_name": "麦金卡", "saved_fen": 400}
+    },
+    {
+      "order_id": "MC2608140012",
+      "order_time": "2026-08-14 12:58:00",
+      "channel": "麦乐送",
+      "store": {
+        "store_code": "SH0207",
+        "store_name": "麦当劳(徐家汇店)",
+        "address": "上海市徐汇区肇嘉浜路1065号"
+      },
+      "items": [
+        {"name": "麦辣鸡腿汉堡", "quantity": 1, "amount_fen": 2200},
+        {"name": "中薯条", "quantity": 1, "amount_fen": 1250},
+        {"name": "可口可乐(中)", "quantity": 1, "amount_fen": 1100}
+      ],
+      "subtotal_fen": 4550,
+      "discount_fen": 350,
+      "total_fen": 4200,
+      "meal_card": {"applied": true, "card_name": "麦金卡", "saved_fen": 350}
+    },
+    {
+      "order_id": "MC2608180013",
+      "order_time": "2026-08-18 19:10:00",
+      "channel": "到店取餐",
+      "store": {
+        "store_code": "SH0418",
+        "store_name": "麦当劳(五角场店)",
+        "address": "上海市杨浦区淞沪路77号"
+      },
+      "items": [
+        {"name": "双层鳕鱼堡", "quantity": 1, "amount_fen": 2100},
+        {"name": "中薯条", "quantity": 1, "amount_fen": 1250},
+        {"name": "可口可乐(中)", "quantity": 1, "amount_fen": 1100}
+      ],
+      "subtotal_fen": 4450,
+      "discount_fen": 350,
+      "total_fen": 4100,
+      "meal_card": {"applied": true, "card_name": "麦金卡", "saved_fen": 350}
+    },
+    {
+      "order_id": "MC2608210014",
+      "order_time": "2026-08-21 12:40:00",
+      "channel": "到店取餐",
+      "store": {
+        "store_code": "SH0331",
+        "store_name": "麦当劳(陆家嘴店)",
+        "address": "上海市浦东新区世纪大道1号"
+      },
+      "items": [
+        {"name": "安格斯厚牛堡", "quantity": 1, "amount_fen": 3200},
+        {"name": "中薯条", "quantity": 1, "amount_fen": 1250},
+        {"name": "可口可乐(中)", "quantity": 1, "amount_fen": 1100}
+      ],
+      "subtotal_fen": 5550,
+      "discount_fen": 450,
+      "total_fen": 5100,
+      "meal_card": {"applied": true, "card_name": "麦金卡", "saved_fen": 450}
+    },
+    {
+      "order_id": "MC2608250015",
+      "order_time": "2026-08-25 08:52:00",
+      "channel": "麦乐送",
+      "store": {
+        "store_code": "SH0114",
+        "store_name": "麦当劳(静安寺店)",
+        "address": "上海市静安区愚园路68号"
+      },
+      "items": [
+        {"name": "猪柳蛋麦满分", "quantity": 1, "amount_fen": 1500},
+        {"name": "薯饼", "quantity": 1, "amount_fen": 700},
+        {"name": "热香饼", "quantity": 1, "amount_fen": 1200}
+      ],
+      "subtotal_fen": 3400,
+      "discount_fen": 500,
+      "total_fen": 2900,
+      "meal_card": {"applied": true, "card_name": "麦金卡", "saved_fen": 500}
+    },
+    {
+      "order_id": "MC2608280016",
+      "order_time": "2026-08-28 12:15:00",
+      "channel": "到店取餐",
+      "store": {
+        "store_code": "SH0021",
+        "store_name": "麦当劳(人民广场店)",
+        "address": "上海市黄浦区南京西路228号"
+      },
+      "items": [
+        {"name": "双层吉士汉堡", "quantity": 1, "amount_fen": 1900},
+        {"name": "中薯条", "quantity": 1, "amount_fen": 1250},
+        {"name": "可口可乐(中)", "quantity": 1, "amount_fen": 1100}
+      ],
+      "subtotal_fen": 4250,
+      "discount_fen": 350,
+      "total_fen": 3900,
+      "meal_card": {"applied": true, "card_name": "麦金卡", "saved_fen": 350}
+    },
+    {
+      "order_id": "MC2609020017",
+      "order_time": "2026-09-02 12:31:00",
+      "channel": "到店取餐",
+      "store": {
+        "store_code": "SH0021",
+        "store_name": "麦当劳(人民广场店)",
+        "address": "上海市黄浦区南京西路228号"
+      },
+      "items": [
+        {"name": "巨无霸", "quantity": 1, "amount_fen": 2500},
+        {"name": "中薯条", "quantity": 1, "amount_fen": 1250},
+        {"name": "零度可乐(中)", "quantity": 1, "amount_fen": 1100}
+      ],
+      "subtotal_fen": 4850,
+      "discount_fen": 400,
+      "total_fen": 4450,
+      "meal_card": {"applied": true, "card_name": "麦金卡", "saved_fen": 400}
+    },
+    {
+      "order_id": "MC2609050018",
+      "order_time": "2026-09-05 13:05:00",
+      "channel": "到店取餐",
+      "store": {
+        "store_code": "SH0207",
+        "store_name": "麦当劳(徐家汇店)",
+        "address": "上海市徐汇区肇嘉浜路1065号"
+      },
+      "items": [
+        {"name": "原味板烧鸡腿堡", "quantity": 1, "amount_fen": 2300},
+        {"name": "玉米杯", "quantity": 1, "amount_fen": 1000},
+        {"name": "可口可乐(中)", "quantity": 1, "amount_fen": 1100}
+      ],
+      "subtotal_fen": 4400,
+      "discount_fen": 400,
+      "total_fen": 4000,
+      "meal_card": {"applied": true, "card_name": "麦金卡", "saved_fen": 400}
+    },
+    {
+      "order_id": "MC2609090019",
+      "order_time": "2026-09-09 12:22:00",
+      "channel": "到店取餐",
+      "store": {
+        "store_code": "SH0114",
+        "store_name": "麦当劳(静安寺店)",
+        "address": "上海市静安区愚园路68号"
+      },
+      "items": [
+        {"name": "巨无霸", "quantity": 1, "amount_fen": 2500},
+        {"name": "中薯条", "quantity": 1, "amount_fen": 1250},
+        {"name": "可口可乐(中)", "quantity": 1, "amount_fen": 1100}
+      ],
+      "subtotal_fen": 4850,
+      "discount_fen": 400,
+      "total_fen": 4450,
+      "meal_card": {"applied": true, "card_name": "麦金卡", "saved_fen": 400}
+    },
+    {
+      "order_id": "MC2609120020",
+      "order_time": "2026-09-12 16:40:00",
+      "channel": "到店取餐",
+      "store": {
+        "store_code": "SH0152",
+        "store_name": "麦当劳(中山公园店)",
+        "address": "上海市长宁区长宁路1018号"
+      },
+      "items": [
+        {"name": "麦咖啡美式", "quantity": 1, "amount_fen": 1800},
+        {"name": "圆筒冰淇淋", "quantity": 1, "amount_fen": 500}
+      ],
+      "subtotal_fen": 2300,
+      "discount_fen": 300,
+      "total_fen": 2000,
+      "meal_card": {"applied": true, "card_name": "麦金卡", "saved_fen": 300}
+    },
+    {
+      "order_id": "MC2609140021",
+      "order_time": "2026-09-14 12:37:00",
+      "channel": "到店取餐",
+      "store": {
+        "store_code": "SH0021",
+        "store_name": "麦当劳(人民广场店)",
+        "address": "上海市黄浦区南京西路228号"
+      },
+      "items": [
+        {"name": "麦辣鸡腿汉堡", "quantity": 1, "amount_fen": 2200},
+        {"name": "中薯条", "quantity": 1, "amount_fen": 1250},
+        {"name": "可口可乐(中)", "quantity": 1, "amount_fen": 1100}
+      ],
+      "subtotal_fen": 4550,
+      "discount_fen": 350,
+      "total_fen": 4200,
+      "meal_card": {"applied": true, "card_name": "麦金卡", "saved_fen": 350}
+    },
+    {
+      "order_id": "MC2609170022",
+      "order_time": "2026-09-17 07:55:00",
+      "channel": "到店取餐",
+      "store": {
+        "store_code": "SH0021",
+        "store_name": "麦当劳(人民广场店)",
+        "address": "上海市黄浦区南京西路228号"
+      },
+      "items": [
+        {"name": "猪柳蛋麦满分", "quantity": 1, "amount_fen": 1500},
+        {"name": "薯饼", "quantity": 1, "amount_fen": 700}
+      ],
+      "subtotal_fen": 2200,
+      "discount_fen": 300,
+      "total_fen": 1900,
+      "meal_card": {"applied": true, "card_name": "麦金卡", "saved_fen": 300}
+    },
+    {
+      "order_id": "MC2609170023",
+      "order_time": "2026-09-17 12:50:00",
+      "channel": "到店取餐",
+      "store": {
+        "store_code": "BJ0088",
+        "store_name": "麦当劳(国贸店)",
+        "address": "北京市朝阳区建国门外大街1号"
+      },
+      "items": [
+        {"name": "巨无霸", "quantity": 1, "amount_fen": 2500},
+        {"name": "中薯条", "quantity": 1, "amount_fen": 1250},
+        {"name": "可口可乐(中)", "quantity": 1, "amount_fen": 1100}
+      ],
+      "subtotal_fen": 4850,
+      "discount_fen": 400,
+      "total_fen": 4450,
+      "meal_card": {"applied": true, "card_name": "麦金卡", "saved_fen": 400}
+    },
+    {
+      "order_id": "MC2609180024",
+      "order_time": "2026-09-18 12:20:00",
+      "channel": "到店取餐",
+      "store": {
+        "store_code": "BJ0102",
+        "store_name": "麦当劳(王府井店)",
+        "address": "北京市东城区王府井大街138号"
+      },
+      "items": [
+        {"name": "麦辣鸡腿汉堡", "quantity": 1, "amount_fen": 2200},
+        {"name": "中薯条", "quantity": 1, "amount_fen": 1250},
+        {"name": "可口可乐(中)", "quantity": 1, "amount_fen": 1100}
+      ],
+      "subtotal_fen": 4550,
+      "discount_fen": 350,
+      "total_fen": 4200,
+      "meal_card": {"applied": true, "card_name": "麦金卡", "saved_fen": 350}
+    },
+    {
+      "order_id": "MC2609190025",
+      "order_time": "2026-09-19 18:30:00",
+      "channel": "到店取餐",
+      "store": {
+        "store_code": "BJ0088",
+        "store_name": "麦当劳(国贸店)",
+        "address": "北京市朝阳区建国门外大街1号"
+      },
+      "items": [
+        {"name": "培根安格斯厚牛堡", "quantity": 1, "amount_fen": 3400},
+        {"name": "大薯条", "quantity": 1, "amount_fen": 1450},
+        {"name": "可口可乐(中)", "quantity": 1, "amount_fen": 1100}
+      ],
+      "subtotal_fen": 5950,
+      "discount_fen": 500,
+      "total_fen": 5450,
+      "meal_card": {"applied": true, "card_name": "麦金卡", "saved_fen": 500}
+    },
+    {
+      "order_id": "MC2609230026",
+      "order_time": "2026-09-23 12:44:00",
+      "channel": "到店取餐",
+      "store": {
+        "store_code": "SH0331",
+        "store_name": "麦当劳(陆家嘴店)",
+        "address": "上海市浦东新区世纪大道1号"
+      },
+      "items": [
+        {"name": "麦辣鸡腿汉堡", "quantity": 1, "amount_fen": 2200},
+        {"name": "香骨鸡", "quantity": 1, "amount_fen": 1600},
+        {"name": "可口可乐(中)", "quantity": 1, "amount_fen": 1100}
+      ],
+      "subtotal_fen": 4900,
+      "discount_fen": 400,
+      "total_fen": 4500,
+      "meal_card": {"applied": true, "card_name": "麦金卡", "saved_fen": 400}
+    },
+    {
+      "order_id": "MC2609260027",
+      "order_time": "2026-09-26 21:35:00",
+      "channel": "麦乐送",
+      "store": {
+        "store_code": "SH0207",
+        "store_name": "麦当劳(徐家汇店)",
+        "address": "上海市徐汇区肇嘉浜路1065号"
+      },
+      "items": [
+        {"name": "麦乐鸡(10块)", "quantity": 1, "amount_fen": 2400},
+        {"name": "大薯条", "quantity": 1, "amount_fen": 1450},
+        {"name": "可口可乐(大)", "quantity": 1, "amount_fen": 1250}
+      ],
+      "subtotal_fen": 5100,
+      "discount_fen": 500,
+      "total_fen": 4600,
+      "meal_card": {"applied": true, "card_name": "麦金卡", "saved_fen": 500}
+    },
+    {
+      "order_id": "MC2609290028",
+      "order_time": "2026-09-29 12:08:00",
+      "channel": "到店取餐",
+      "store": {
+        "store_code": "SH0021",
+        "store_name": "麦当劳(人民广场店)",
+        "address": "上海市黄浦区南京西路228号"
+      },
+      "items": [
+        {"name": "巨无霸", "quantity": 1, "amount_fen": 2500},
+        {"name": "麦乐鸡(5块)", "quantity": 1, "amount_fen": 1300},
+        {"name": "可口可乐(中)", "quantity": 1, "amount_fen": 1100}
+      ],
+      "subtotal_fen": 4900,
+      "discount_fen": 400,
+      "total_fen": 4500,
+      "meal_card": {"applied": true, "card_name": "麦金卡", "saved_fen": 400}
+    },
+    {
+      "order_id": "MC2609300029",
+      "order_time": "2026-09-30 19:20:00",
+      "channel": "企业团餐",
+      "store": {
+        "store_code": "SH0207",
+        "store_name": "麦当劳(徐家汇店)",
+        "address": "上海市徐汇区肇嘉浜路1065号"
+      },
+      "items": [
+        {"name": "巨无霸", "quantity": 4, "amount_fen": 2500},
+        {"name": "中薯条", "quantity": 4, "amount_fen": 1250},
+        {"name": "可口可乐(中)", "quantity": 4, "amount_fen": 1100}
+      ],
+      "subtotal_fen": 19400,
+      "discount_fen": 600,
+      "total_fen": 18800,
+      "meal_card": {"applied": true, "card_name": "麦金卡", "saved_fen": 600}
+    },
+    {
+      "order_id": "MC2610020030",
+      "order_time": "2026-10-02 11:20:00",
+      "channel": "得来速",
+      "store": {
+        "store_code": "SZ0203",
+        "store_name": "麦当劳(科技园店)",
+        "address": "广东省深圳市南山区科苑路15号"
+      },
+      "items": [
+        {"name": "巨无霸", "quantity": 1, "amount_fen": 2500},
+        {"name": "中薯条", "quantity": 1, "amount_fen": 1250},
+        {"name": "可口可乐(中)", "quantity": 1, "amount_fen": 1100}
+      ],
+      "subtotal_fen": 4850,
+      "discount_fen": 400,
+      "total_fen": 4450,
+      "meal_card": {"applied": true, "card_name": "麦金卡", "saved_fen": 400}
+    },
+    {
+      "order_id": "MC2610030031",
+      "order_time": "2026-10-03 12:35:00",
+      "channel": "到店取餐",
+      "store": {
+        "store_code": "SZ0203",
+        "store_name": "麦当劳(科技园店)",
+        "address": "广东省深圳市南山区科苑路15号"
+      },
+      "items": [
+        {"name": "不素之霸", "quantity": 1, "amount_fen": 2600},
+        {"name": "中薯条", "quantity": 1, "amount_fen": 1250},
+        {"name": "雪碧(中)", "quantity": 1, "amount_fen": 1100}
+      ],
+      "subtotal_fen": 4950,
+      "discount_fen": 400,
+      "total_fen": 4550,
+      "meal_card": {"applied": true, "card_name": "麦金卡", "saved_fen": 400}
+    },
+    {
+      "order_id": "MC2610050032",
+      "order_time": "2026-10-05 12:10:00",
+      "channel": "到店取餐",
+      "store": {
+        "store_code": "HZ0107",
+        "store_name": "麦当劳(西湖店)",
+        "address": "浙江省杭州市西湖区延安路258号"
+      },
+      "items": [
+        {"name": "原味板烧鸡腿堡", "quantity": 1, "amount_fen": 2300},
+        {"name": "中薯条", "quantity": 1, "amount_fen": 1250},
+        {"name": "可口可乐(中)", "quantity": 1, "amount_fen": 1100}
+      ],
+      "subtotal_fen": 4650,
+      "discount_fen": 400,
+      "total_fen": 4250,
+      "meal_card": {"applied": true, "card_name": "麦金卡", "saved_fen": 400}
+    },
+    {
+      "order_id": "MC2610060033",
+      "order_time": "2026-10-06 19:05:00",
+      "channel": "到店取餐",
+      "store": {
+        "store_code": "HZ0107",
+        "store_name": "麦当劳(西湖店)",
+        "address": "浙江省杭州市西湖区延安路258号"
+      },
+      "items": [
+        {"name": "巨无霸", "quantity": 1, "amount_fen": 2500},
+        {"name": "麦乐鸡(5块)", "quantity": 1, "amount_fen": 1300},
+        {"name": "可口可乐(中)", "quantity": 1, "amount_fen": 1100}
+      ],
+      "subtotal_fen": 4900,
+      "discount_fen": 400,
+      "total_fen": 4500,
+      "meal_card": {"applied": true, "card_name": "麦金卡", "saved_fen": 400}
+    },
+    {
+      "order_id": "MC2610070034",
+      "order_time": "2026-10-07 13:15:00",
+      "channel": "到店取餐",
+      "store": {
+        "store_code": "SU1201",
+        "store_name": "麦当劳(园区店)",
+        "address": "江苏省苏州市工业园区星海街188号"
+      },
+      "items": [
+        {"name": "原味板烧鸡腿堡", "quantity": 1, "amount_fen": 2300},
+        {"name": "中薯条", "quantity": 1, "amount_fen": 1250},
+        {"name": "可口可乐(中)", "quantity": 1, "amount_fen": 1100}
+      ],
+      "subtotal_fen": 4650,
+      "discount_fen": 400,
+      "total_fen": 4250,
+      "meal_card": {"applied": true, "card_name": "麦金卡", "saved_fen": 400}
+    },
+    {
+      "order_id": "MC2610080035",
+      "order_time": "2026-10-08 12:28:00",
+      "channel": "堂食外带",
+      "store": {
+        "store_code": "CD0066",
+        "store_name": "麦当劳(春熙路店)",
+        "address": "四川省成都市锦江区春熙路8号"
+      },
+      "items": [
+        {"name": "麦辣鸡腿汉堡", "quantity": 1, "amount_fen": 2200},
+        {"name": "中薯条", "quantity": 1, "amount_fen": 1250},
+        {"name": "零度可乐(中)", "quantity": 1, "amount_fen": 1100}
+      ],
+      "subtotal_fen": 4550,
+      "discount_fen": 350,
+      "total_fen": 4200,
+      "meal_card": {"applied": true, "card_name": "麦金卡", "saved_fen": 350}
+    },
+    {
+      "order_id": "MC2610090036",
+      "order_time": "2026-10-09 12:50:00",
+      "channel": "到店取餐",
+      "store": {
+        "store_code": "NJ0039",
+        "store_name": "麦当劳(鼓楼店)",
+        "address": "江苏省南京市鼓楼区中山北路1号"
+      },
+      "items": [
+        {"name": "双层吉士汉堡", "quantity": 1, "amount_fen": 1900},
+        {"name": "中薯条", "quantity": 1, "amount_fen": 1250},
+        {"name": "可口可乐(中)", "quantity": 1, "amount_fen": 1100}
+      ],
+      "subtotal_fen": 4250,
+      "discount_fen": 350,
+      "total_fen": 3900,
+      "meal_card": {"applied": true, "card_name": "麦金卡", "saved_fen": 350}
+    },
+    {
+      "order_id": "MC2610110037",
+      "order_time": "2026-10-11 09:40:00",
+      "channel": "到店取餐",
+      "store": {
+        "store_code": "SH0021",
+        "store_name": "麦当劳(人民广场店)",
+        "address": "上海市黄浦区南京西路228号"
+      },
+      "items": [
+        {"name": "满福堡", "quantity": 1, "amount_fen": 1400},
+        {"name": "薯饼", "quantity": 1, "amount_fen": 700},
+        {"name": "豆浆", "quantity": 1, "amount_fen": 900}
+      ],
+      "subtotal_fen": 3000,
+      "discount_fen": 300,
+      "total_fen": 2700,
+      "meal_card": {"applied": true, "card_name": "麦金卡", "saved_fen": 300}
+    }
+  ]
+}

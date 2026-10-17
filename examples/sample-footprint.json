@@ -1,0 +1,527 @@
+{
+  "meta": {
+    "skill": "mcd-footprint",
+    "generated_at": "2026-10-12 15:43:31",
+    "data_source": "McDonald's China MCP",
+    "endpoint": "https://mcp.mcd.cn",
+    "sample_count": 37,
+    "coverage_note": "官方 order-list 仅返回近期订单，不是全年完整历史；本报告的分布结论仅代表该样本区间。",
+    "timezone_note": "order-list 返回的下单时间字段不含时区，本报告统一按 UTC+8 解释。",
+    "amount_note": "接口金额原始单位为分，本报告已统一换算为元（保留两位小数）。",
+    "category_note": "品类由商品名称关键词启发式归类，非麦当劳官方分类。",
+    "city_note": "城市与区由门店地址文本解析，官方不返回结构化城市字段，也不返回经纬度。",
+    "slot_note": "时段划分：深夜 00:00-05:59 / 早餐 06:00-10:29 / 午市 10:30-13:59 / 下午茶 14:00-16:59 / 晚市 17:00-20:59 / 夜宵 21:00-23:59。"
+  },
+  "summary": {
+    "order_count": 37,
+    "total_yuan": 1661.0,
+    "saved_yuan": 117.5,
+    "item_qty": 116,
+    "city_count": 7,
+    "store_count": 13,
+    "first_order": "2026-07-06 12:18",
+    "last_order": "2026-10-11 09:40",
+    "span_days": 97
+  },
+  "highlights": [
+    "足迹覆盖 7 座城市、13 家门店。",
+    "去得最多的是「麦当劳(人民广场店)」，共 12 单（上海市）。",
+    "最活跃的时段是 周五 午市，共 6 单。",
+    "最常用的点餐方式是「到店取餐」，占 78%。",
+    "点得最多的单品是「可口可乐(中)」，累计 26 份。",
+    "持卡 3 个月，累计省下 117.5 元，扣掉 57.0 元月费后净赚 60.5 元（2.06 倍回本）。"
+  ],
+  "time_heatmap": {
+    "slots": [
+      "深夜",
+      "早餐",
+      "午市",
+      "下午茶",
+      "晚市",
+      "夜宵"
+    ],
+    "weekdays": [
+      "周一",
+      "周二",
+      "周三",
+      "周四",
+      "周五",
+      "周六",
+      "周日"
+    ],
+    "matrix": [
+      [
+        0,
+        0,
+        4,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        1,
+        3,
+        0,
+        2,
+        0
+      ],
+      [
+        0,
+        0,
+        4,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        2,
+        5,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        6,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        2,
+        2,
+        1,
+        2
+      ],
+      [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "max": 6
+  },
+  "hour_hist": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    2,
+    0,
+    1,
+    21,
+    2,
+    0,
+    1,
+    1,
+    0,
+    2,
+    3,
+    0,
+    1,
+    1,
+    0
+  ],
+  "weekday_mix": [
+    {
+      "weekday": "周一",
+      "orders": 5,
+      "spend_yuan": 221.5
+    },
+    {
+      "weekday": "周二",
+      "orders": 6,
+      "spend_yuan": 253.5
+    },
+    {
+      "weekday": "周三",
+      "orders": 5,
+      "spend_yuan": 364.5
+    },
+    {
+      "weekday": "周四",
+      "orders": 7,
+      "spend_yuan": 263.0
+    },
+    {
+      "weekday": "周五",
+      "orders": 6,
+      "spend_yuan": 257.5
+    },
+    {
+      "weekday": "周六",
+      "orders": 7,
+      "spend_yuan": 274.0
+    },
+    {
+      "weekday": "周日",
+      "orders": 1,
+      "spend_yuan": 27.0
+    }
+  ],
+  "monthly": [
+    {
+      "month": "2026-07",
+      "orders": 7,
+      "spend_yuan": 307.5
+    },
+    {
+      "month": "2026-08",
+      "orders": 9,
+      "spend_yuan": 350.5
+    },
+    {
+      "month": "2026-09",
+      "orders": 13,
+      "spend_yuan": 675.0
+    },
+    {
+      "month": "2026-10",
+      "orders": 8,
+      "spend_yuan": 328.0
+    }
+  ],
+  "channel_mix": [
+    {
+      "channel": "到店取餐",
+      "orders": 29,
+      "spend_yuan": 1190.5,
+      "share": 0.7838,
+      "known": true
+    },
+    {
+      "channel": "麦乐送",
+      "orders": 5,
+      "spend_yuan": 196.0,
+      "share": 0.1351,
+      "known": true
+    },
+    {
+      "channel": "企业团餐",
+      "orders": 1,
+      "spend_yuan": 188.0,
+      "share": 0.027,
+      "known": true
+    },
+    {
+      "channel": "得来速",
+      "orders": 1,
+      "spend_yuan": 44.5,
+      "share": 0.027,
+      "known": true
+    },
+    {
+      "channel": "堂食外带",
+      "orders": 1,
+      "spend_yuan": 42.0,
+      "share": 0.027,
+      "known": true
+    }
+  ],
+  "category_mix": [
+    {
+      "category": "汉堡",
+      "quantity": 32,
+      "amount_yuan": 756.0,
+      "share": 0.4251
+    },
+    {
+      "category": "小食",
+      "quantity": 35,
+      "amount_yuan": 469.0,
+      "share": 0.2637
+    },
+    {
+      "category": "饮料",
+      "quantity": 36,
+      "amount_yuan": 396.5,
+      "share": 0.2229
+    },
+    {
+      "category": "早餐",
+      "quantity": 9,
+      "amount_yuan": 99.0,
+      "share": 0.0557
+    },
+    {
+      "category": "咖啡",
+      "quantity": 2,
+      "amount_yuan": 40.0,
+      "share": 0.0225
+    },
+    {
+      "category": "冰品甜点",
+      "quantity": 2,
+      "amount_yuan": 18.0,
+      "share": 0.0101
+    }
+  ],
+  "top_items": [
+    {
+      "name": "可口可乐(中)",
+      "quantity": 26,
+      "amount_yuan": 286.0,
+      "orders": 23
+    },
+    {
+      "name": "中薯条",
+      "quantity": 25,
+      "amount_yuan": 312.5,
+      "orders": 22
+    },
+    {
+      "name": "巨无霸",
+      "quantity": 13,
+      "amount_yuan": 325.0,
+      "orders": 10
+    },
+    {
+      "name": "麦辣鸡腿汉堡",
+      "quantity": 6,
+      "amount_yuan": 132.0,
+      "orders": 6
+    },
+    {
+      "name": "原味板烧鸡腿堡",
+      "quantity": 5,
+      "amount_yuan": 115.0,
+      "orders": 5
+    },
+    {
+      "name": "薯饼",
+      "quantity": 4,
+      "amount_yuan": 28.0,
+      "orders": 4
+    },
+    {
+      "name": "双层吉士汉堡",
+      "quantity": 3,
+      "amount_yuan": 57.0,
+      "orders": 3
+    },
+    {
+      "name": "猪柳蛋麦满分",
+      "quantity": 3,
+      "amount_yuan": 45.0,
+      "orders": 3
+    },
+    {
+      "name": "大薯条",
+      "quantity": 3,
+      "amount_yuan": 43.5,
+      "orders": 3
+    },
+    {
+      "name": "麦乐鸡(5块)",
+      "quantity": 3,
+      "amount_yuan": 39.0,
+      "orders": 3
+    },
+    {
+      "name": "可口可乐(大)",
+      "quantity": 3,
+      "amount_yuan": 37.5,
+      "orders": 3
+    },
+    {
+      "name": "零度可乐(中)",
+      "quantity": 3,
+      "amount_yuan": 33.0,
+      "orders": 3
+    }
+  ],
+  "geo": {
+    "cities": [
+      {
+        "city": "上海市",
+        "province": "",
+        "orders": 27,
+        "spend_yuan": 1219.0,
+        "districts": [
+          "黄浦区",
+          "徐汇区",
+          "静安区",
+          "浦东新区",
+          "长宁区",
+          "杨浦区"
+        ],
+        "stores": [
+          {
+            "store_name": "麦当劳(人民广场店)",
+            "address": "上海市黄浦区南京西路228号",
+            "orders": 12,
+            "spend_yuan": 463.0
+          },
+          {
+            "store_name": "麦当劳(徐家汇店)",
+            "address": "上海市徐汇区肇嘉浜路1065号",
+            "orders": 5,
+            "spend_yuan": 362.0
+          },
+          {
+            "store_name": "麦当劳(静安寺店)",
+            "address": "上海市静安区愚园路68号",
+            "orders": 4,
+            "spend_yuan": 153.5
+          },
+          {
+            "store_name": "麦当劳(陆家嘴店)",
+            "address": "上海市浦东新区世纪大道1号",
+            "orders": 3,
+            "spend_yuan": 144.5
+          },
+          {
+            "store_name": "麦当劳(中山公园店)",
+            "address": "上海市长宁区长宁路1018号",
+            "orders": 2,
+            "spend_yuan": 55.0
+          },
+          {
+            "store_name": "麦当劳(五角场店)",
+            "address": "上海市杨浦区淞沪路77号",
+            "orders": 1,
+            "spend_yuan": 41.0
+          }
+        ]
+      },
+      {
+        "city": "北京市",
+        "province": "",
+        "orders": 3,
+        "spend_yuan": 141.0,
+        "districts": [
+          "朝阳区",
+          "东城区"
+        ],
+        "stores": [
+          {
+            "store_name": "麦当劳(国贸店)",
+            "address": "北京市朝阳区建国门外大街1号",
+            "orders": 2,
+            "spend_yuan": 99.0
+          },
+          {
+            "store_name": "麦当劳(王府井店)",
+            "address": "北京市东城区王府井大街138号",
+            "orders": 1,
+            "spend_yuan": 42.0
+          }
+        ]
+      },
+      {
+        "city": "深圳市",
+        "province": "广东省",
+        "orders": 2,
+        "spend_yuan": 90.0,
+        "districts": [
+          "南山区"
+        ],
+        "stores": [
+          {
+            "store_name": "麦当劳(科技园店)",
+            "address": "广东省深圳市南山区科苑路15号",
+            "orders": 2,
+            "spend_yuan": 90.0
+          }
+        ]
+      },
+      {
+        "city": "杭州市",
+        "province": "浙江省",
+        "orders": 2,
+        "spend_yuan": 87.5,
+        "districts": [
+          "西湖区"
+        ],
+        "stores": [
+          {
+            "store_name": "麦当劳(西湖店)",
+            "address": "浙江省杭州市西湖区延安路258号",
+            "orders": 2,
+            "spend_yuan": 87.5
+          }
+        ]
+      },
+      {
+        "city": "苏州市",
+        "province": "江苏省",
+        "orders": 1,
+        "spend_yuan": 42.5,
+        "districts": [
+          "工业园区"
+        ],
+        "stores": [
+          {
+            "store_name": "麦当劳(园区店)",
+            "address": "江苏省苏州市工业园区星海街188号",
+            "orders": 1,
+            "spend_yuan": 42.5
+          }
+        ]
+      },
+      {
+        "city": "成都市",
+        "province": "四川省",
+        "orders": 1,
+        "spend_yuan": 42.0,
+        "districts": [
+          "锦江区"
+        ],
+        "stores": [
+          {
+            "store_name": "麦当劳(春熙路店)",
+            "address": "四川省成都市锦江区春熙路8号",
+            "orders": 1,
+            "spend_yuan": 42.0
+          }
+        ]
+      },
+      {
+        "city": "南京市",
+        "province": "江苏省",
+        "orders": 1,
+        "spend_yuan": 39.0,
+        "districts": [
+          "鼓楼区"
+        ],
+        "stores": [
+          {
+            "store_name": "麦当劳(鼓楼店)",
+            "address": "江苏省南京市鼓楼区中山北路1号",
+            "orders": 1,
+            "spend_yuan": 39.0
+          }
+        ]
+      }
+    ],
+    "max_city_orders": 27
+  },
+  "mealcard": {
+    "has_card": true,
+    "card_name": "麦金卡",
+    "first_card_order": "2026-08-03",
+    "months_held": 3,
+    "monthly_fee_yuan": 19.0,
+    "cost_yuan": 57.0,
+    "saved_yuan": 117.5,
+    "net_yuan": 60.5,
+    "roi": 2.06,
+    "card_orders": 30,
+    "plain_orders": 7,
+    "note": "持卡月数按「首笔用卡订单所在月 → 末笔订单所在月」的自然月数估算，月费取默认值，可在参数中调整。"
+  },
+  "warnings": []
+}
