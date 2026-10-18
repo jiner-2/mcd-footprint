@@ -22,9 +22,12 @@
       ⚠ 控制节奏，避免触发每分钟 600 次限流
       ⚠ 部分失败 → 保留成功的订单，并明确说明覆盖面
 
-4. ⇒ 规范化
-      → 按 SKILL.md 的 schema 映射为 orders-raw.json
-      → 四条硬规则：金额保持分 / 点餐方式归一到五种 / 不填 city 与 district / 麦金卡取不到填 null
+4. ⇒ normalize_orders.py
+      → 原始返回落盘为 raw/（或单个 raw.json），再 --input raw/ --output orders.json
+      → 首次拿到新版本返回先 --dump-keys，把实际键名补进脚本顶部 ALIASES
+      → 四条硬规则：金额单位按文件判定 / 点餐方式归一到五种 / 不填 city 与 district / 麦金卡取不到填 null
+      ⚠ 报「没有识别出订单对象」→ 看 --dump-keys 结果补别名，不要手工编 JSON 绕过去
+      ⚠ 报「金额超 2000 元」→ 用 --amount-unit fen|yuan 显式指定后重跑
 
 5. footprint_aggregate.py
       → footprint.json
