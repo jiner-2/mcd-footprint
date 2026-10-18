@@ -1,15 +1,16 @@
 {
   "meta": {
     "skill": "mcd-footprint",
-    "generated_at": "2026-10-12 15:43:31",
-    "data_source": "McDonald's China MCP",
+    "generated_at": "2026-10-18 15:28:53",
+    "data_source": "麦当劳中国 MCP · order-list + query-order",
     "endpoint": "https://mcp.mcd.cn",
     "sample_count": 37,
     "coverage_note": "官方 order-list 仅返回近期订单，不是全年完整历史；本报告的分布结论仅代表该样本区间。",
     "timezone_note": "order-list 返回的下单时间字段不含时区，本报告统一按 UTC+8 解释。",
-    "amount_note": "接口金额原始单位为分，本报告已统一换算为元（保留两位小数）。",
+    "amount_note": "order-list / query-order 返回的金额是**元**且为字符串（如 \"14.9\"），不是分；本报告内部统一折算为分计算，展示时再换回元。菜单类接口（query-meals 等）的金额单位不同，不要混用。",
     "category_note": "品类由商品名称关键词启发式归类，非麦当劳官方分类。",
-    "city_note": "城市与区由门店地址文本解析，官方不返回结构化城市字段，也不返回经纬度。",
+    "city_note": "官方不返回城市字段与经纬度。城市优先由门店地址文本解析，地址不含城市时改用门店名（如「麦当劳南京万泰路…」）前缀匹配内置城市表；两者都拿不到时留空，不猜。",
+    "combo_note": "套餐商品已展开为子项归类，子项金额按数量均摊，合计与套餐价一致。",
     "slot_note": "时段划分：深夜 00:00-05:59 / 早餐 06:00-10:29 / 午市 10:30-13:59 / 下午茶 14:00-16:59 / 晚市 17:00-20:59 / 夜宵 21:00-23:59。"
   },
   "summary": {
@@ -29,7 +30,9 @@
     "最活跃的时段是 周五 午市，共 6 单。",
     "最常用的点餐方式是「到店取餐」，占 78%。",
     "点得最多的单品是「可口可乐(中)」，累计 26 份。",
-    "持卡 3 个月，累计省下 117.5 元，扣掉 57.0 元月费后净赚 60.5 元（2.06 倍回本）。"
+    "原价 1778.50 元、实付 1661.00 元，一共省下 117.50 元（7%）。",
+    "最值钱的一张券是「超值4件套」，用过 7 次，省下 26.00 元。",
+    "用餐方式以「堂食」为主，占 76%。"
   ],
   "time_heatmap": {
     "slots": [
@@ -229,6 +232,20 @@
       "spend_yuan": 42.0,
       "share": 0.027,
       "known": true
+    }
+  ],
+  "takeway_mix": [
+    {
+      "takeway": "堂食",
+      "orders": 28,
+      "spend_yuan": 1304.0,
+      "share": 0.7568
+    },
+    {
+      "takeway": "外带",
+      "orders": 9,
+      "spend_yuan": 357.0,
+      "share": 0.2432
     }
   ],
   "category_mix": [
@@ -509,19 +526,66 @@
     ],
     "max_city_orders": 27
   },
-  "mealcard": {
-    "has_card": true,
-    "card_name": "麦金卡",
-    "first_card_order": "2026-08-03",
-    "months_held": 3,
-    "monthly_fee_yuan": 19.0,
-    "cost_yuan": 57.0,
+  "discount_ledger": {
+    "original_yuan": 1778.5,
+    "paid_yuan": 1661.0,
     "saved_yuan": 117.5,
-    "net_yuan": 60.5,
-    "roi": 2.06,
-    "card_orders": 30,
-    "plain_orders": 7,
-    "note": "持卡月数按「首笔用卡订单所在月 → 末笔订单所在月」的自然月数估算，月费取默认值，可在参数中调整。"
+    "save_rate": 0.0661,
+    "avg_paid_yuan": 44.89,
+    "coupon_orders": 30,
+    "no_coupon_orders": 7,
+    "coupon_order_rate": 0.8108,
+    "top_coupons": [
+      {
+        "name": "超值4件套",
+        "times": 7,
+        "saved_yuan": 26.0
+      },
+      {
+        "name": "6折早餐",
+        "times": 7,
+        "saved_yuan": 25.5
+      },
+      {
+        "name": "5元到店取餐福利金",
+        "times": 6,
+        "saved_yuan": 23.5
+      },
+      {
+        "name": "9.9元随心小食任选",
+        "times": 4,
+        "saved_yuan": 16.0
+      },
+      {
+        "name": "外送满减券",
+        "times": 3,
+        "saved_yuan": 13.5
+      },
+      {
+        "name": "团餐满减券",
+        "times": 1,
+        "saved_yuan": 6.0
+      },
+      {
+        "name": "满35减8配送券",
+        "times": 1,
+        "saved_yuan": 3.5
+      },
+      {
+        "name": "脆薯饼买一送一",
+        "times": 1,
+        "saved_yuan": 3.5
+      }
+    ],
+    "best_saving": {
+      "date": "2026-09-30",
+      "store_name": "麦当劳(徐家汇店)",
+      "original_yuan": 194.0,
+      "saved_yuan": 6.0,
+      "paid_yuan": 188.0,
+      "save_rate": 0.0309
+    },
+    "note": "省下的钱来自订单返回的优惠金额合计（totalDiscountAmount），券名来自 couponList。接口不返回持卡标识，故本维度不区分麦金卡/非麦金卡。"
   },
   "warnings": []
 }
