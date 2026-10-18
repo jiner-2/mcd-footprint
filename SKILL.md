@@ -1,12 +1,12 @@
 ---
 name: mcd-footprint
-description: This skill should be used when the user wants to see their own McDonald's China consumption footprint — where they ate, when they ate, how they ordered, what they ordered, and whether their 麦金卡 (McDonald's China paid membership) actually paid off. It pulls the user's recent order history from the McDonald's China MCP server, aggregates it locally into five dimensions, and renders a self-contained HTML report plus a 1080×1920 shareable card. All personal order data stays on the user's machine and is never uploaded.
+description: This skill should be used when the user wants to see their own McDonald's China consumption footprint — where they ate, when they ate, how they ordered, what they ordered, and how much their coupons actually saved. It pulls the user's recent order history from the McDonald's China MCP server, aggregates it locally into five dimensions, and renders a self-contained HTML report plus a 1080×1920 shareable card. All personal order data stays on the user's machine and is never uploaded.
 agent_created: true
 ---
 
 # 麦麦足迹 · MCD Footprint
 
-把用户本人的麦当劳订单历史，聚合成一张**消费行为画像**：在哪吃、什么时候吃、怎么点、爱吃什么、麦金卡值不值。
+把用户本人的麦当劳订单历史，聚合成一张**消费行为画像**：在哪吃、什么时候吃、怎么点、爱吃什么、省下的钱从哪来。
 
 产出两份东西：一份自包含 HTML 报告，一张可分享的竖版卡片。**全程本地计算，订单数据不出本机。**
 
@@ -17,7 +17,7 @@ agent_created: true
 - "看看我在麦当劳花了多少钱、都吃了什么"
 - "把我的麦当劳订单做成一张消费画像 / 年度报告"
 - "我经常吃哪家店？一般什么时间吃？"
-- "我这张麦金卡办得值不值，省回来没有"
+- "我这一年优惠券到底省了多少钱"
 - "生成一张我的麦当劳足迹分享卡"
 
 ## 何时不使用
@@ -88,15 +88,17 @@ python scripts/normalize_orders.py --input orders-raw.json --output orders.json
       "store": {
         "store_code": "门店编码",
         "store_name": "门店名称",
-        "address": "门店完整地址（用于解析城市与区）"
+        "address": "门店完整地址（query-order 的 storeAddress，通常不含城市名）",
+        "city_hint": "从门店名前缀切出的城市，可选"
       },
       "items": [
         { "name": "巨无霸", "quantity": 1, "amount_fen": 2500 }
       ],
+      "takeway": "堂食",
       "subtotal_fen": 4850,
       "discount_fen": 400,
       "total_fen": 4450,
-      "meal_card": { "applied": true, "card_name": "麦金卡", "saved_fen": 400 }
+      "coupons": [ { "name": "超值4件套", "amount_fen": 400 } ]
     }
   ]
 }
@@ -106,10 +108,10 @@ python scripts/normalize_orders.py --input orders-raw.json --output orders.json
 
 | 规则 | 说明 |
 |---|---|
-| **金额单位** | 接口金额是**分**，直接填 `amount_fen` / `total_fen`，**不要预先除以 100**，换算由脚本统一做。 |
+| **金额单位** | 订单接口给的是**元**（字符串，如 `"14.9"`）。写进 schema 时必须换算成**分**填 `amount_fen` / `total_fen`，单位别搞混——菜单接口才是分。 |
 | **点餐方式** | 归一到五种：`到店取餐` / `麦乐送` / `得来速` / `堂食外带` / `企业团餐`。无法判定时填「未知」，**不要猜**。 |
-| **城市与区** | **不要自己填 `city` / `district` 字段**——脚本会从 `address` 文本解析。你只需保证 `address` 是完整的门店地址原文。 |
-| **麦金卡** | 若返回中确实没有持卡 / 权益字段，填 `null`；不要因为"用户可能持卡"就编一个。报告会自动降级说明。 |
+| **城市与区** | **不要自己填 `city` / `district` 字段**——脚本会先解析 `address`，解析不出再用 `city_hint`。你只需保证 `address` 是原文、`city_hint` 是从门店名前缀切出来的。 |
+| **优惠与券** | 有 `totalDiscountAmount` 就填 `discount_fen`，有 `couponList` 就填 `coupons`。**接口不返回持卡标识**，不要臆造 `meal_card`。 |
 
 `subtotal_fen` 是可选的自检字段：填了，脚本会拿它跟明细加总比对；对不上会在报告里生成告警。**能填就填**，这是给数据上保险。
 
@@ -136,7 +138,7 @@ python scripts/render_report.py --input footprint.json --output report.html --ca
 
 用 `present_files` 把 `report.html` 与 `card.html` 一起交给用户。回复时：
 
-- 给出**三到五个最关键的结论**（常去门店、活跃时段、最爱单品、麦金卡是否回本）；
+- 给出**三到五个最关键的结论**（常去门店、活跃时段、最爱单品、省下多少钱）；
 - 说明数据边界（近期订单、无坐标、统一 UTC+8）；
 - **不要**把订单明细原样贴进聊天窗口——那是个人消费记录。
 
@@ -147,9 +149,9 @@ python scripts/render_report.py --input footprint.json --output report.html --ca
 | 用户没配 Token | 引导申请，不生成假报告 |
 | `order-list` 返回 0 单 | 如实告知无可分析数据，不造空壳报告 |
 | 订单 < 15 单 | 照常生成，但明确提示"样本偏小，分布仅供参照" |
-| 门店地址解析不出城市 | 保留订单，该单不计入城市维度；报告会告警 |
+| 地址解析不出城市 | 用门店名前缀兜底；仍拿不到才不计入城市维度，报告会告警 |
 | 拿不到点餐方式字段 | 填「未知」，不要按订单类型反推成具体场景 |
-| 拿不到麦金卡字段 | 填 `null`，报告自动降级为"本次未见持卡记录" |
+| 想算「麦金卡值不值」 | **接口不返回持卡字段，算不了**。改用优惠账本，并说明原因 |
 | 出现小计对不上告警 | 回到规范化步骤修映射，不要绕过 |
 | 用户想对比多人 / 全网 | 超出范围，说明本 skill 只处理本人订单 |
 
@@ -157,7 +159,7 @@ python scripts/render_report.py --input footprint.json --output report.html --ca
 
 - 金额一律**元、两位小数**；份数用整数。
 - 报告必须包含**口径与存疑提示**区块——这是本项目的硬要求，不可省略。
-- 涉及麦金卡"回本"结论时，必须同时给出**节省额、月费成本、持有月数**三个数字，让用户能自己验算。
+- 涉及"省了多少钱"时，必须同时给出**原价、实付、省下**三个数字，且原价 − 省下 = 实付，让用户能自己验算。
 - 结尾固定说明：数据来自用户本人的麦当劳订单，仅存于本机；本项目为参赛作品，非麦当劳官方产品。
 
 ## 资源索引
