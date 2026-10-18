@@ -124,6 +124,9 @@ h1 .accent{background:linear-gradient(100deg,var(--brand),var(--brown));-webkit-
 .bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--brand),#ec6a52)}
 .bar-fill.gold{background:linear-gradient(90deg,var(--gold),#f6cd6a)}
 .bar-val{font-size:12.5px;color:var(--ink3);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.bar-foot{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line);font-size:12.5px;color:var(--ink2);line-height:1.75}
+.bar-foot b{color:var(--ink);font-weight:700}
+.bar-foot .dim{color:var(--ink3)}
 
 /* ---------- 城市 ---------- */
 .cities{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
@@ -136,7 +139,7 @@ h1 .accent{background:linear-gradient(100deg,var(--brand),var(--brown));-webkit-
 .city .store b{color:var(--ink);font-weight:600}
 .city .spend{font-size:12px;color:var(--ink3);margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)}
 
-/* ---------- 麦金卡 ---------- */
+/* ---------- 优惠账本 ---------- */
 .ledger{background:linear-gradient(140deg,#2f2622,#4a352c);color:#f7efe7;border:none;border-radius:16px;padding:26px;box-shadow:var(--shadow)}
 .ledger h2{color:#fff}
 .ledger h2 .dot{background:var(--gold)}
@@ -148,6 +151,13 @@ h1 .accent{background:linear-gradient(100deg,var(--brand),var(--brown));-webkit-
 .ledger-grid .v.bad{color:#f2a08f}
 .ledger .verdict{margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,.14);font-size:14px;color:#e8dcd2}
 .ledger .verdict b{color:var(--gold)}
+.cp-title{margin-top:20px;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:#c4b3a6}
+.cp-list{margin-top:10px;display:flex;flex-direction:column;gap:9px}
+.cp{display:grid;grid-template-columns:150px 1fr 130px;gap:12px;align-items:center}
+.cp .cp-n{font-size:13px;color:#f4e9df;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cp .cp-bar{height:8px;border-radius:4px;background:rgba(255,255,255,.10);overflow:hidden}
+.cp .cp-bar i{display:block;height:100%;border-radius:4px;background:var(--gold)}
+.cp .cp-v{font-size:12px;color:#c4b3a6;text-align:right;font-variant-numeric:tabular-nums}
 
 /* ---------- 口径 ---------- */
 .notes{list-style:none;display:flex;flex-direction:column;gap:8px}
@@ -287,7 +297,7 @@ def sec_monthly(r):
     return "".join(out)
 
 
-def sec_bars(title, sub, rows, fmt, cls=""):
+def sec_bars(title, sub, rows, fmt, cls="", foot=""):
     if not rows:
         return ""
     out = ['<div class="panel">']
@@ -303,7 +313,10 @@ def sec_bars(title, sub, rows, fmt, cls=""):
                    '<div class="bar-track"><div class="bar-fill %s" style="width:%d%%"></div></div>'
                    '<div class="bar-val">%s</div></div>'
                    % (esc(x["_name"]), cls, w, fmt(x)))
-    out.append('</div></div>')
+    out.append('</div>')
+    if foot:
+        out.append('<div class="bar-foot">%s</div>' % foot)
+    out.append('</div>')
     return "".join(out)
 
 
@@ -312,11 +325,26 @@ def sec_channels(r):
     for c in r["channel_mix"]:
         rows.append({"_name": c["channel"], "_w": c["orders"], "_d": c,
                      "_o": c["orders"], "_s": c["share"], "_y": c["spend_yuan"]})
+
+    # 堂食/外带是另一个轴：beType 说「怎么取餐」，takeWay 说「在哪吃」。
+    # 实测 beType 常常全场只有一个值（10 单全是「到店取餐」），
+    # 单靠它这一维度就没有信息量，所以把 takeWay 补在下方。
+    tw = r.get("takeway_mix") or []
+    foot = ""
+    if tw:
+        parts = " · ".join("%s %d 单（%.0f%%）"
+                           % (esc(t["takeway"]), t["orders"], t["share"] * 100) for t in tw)
+        foot = '<b>堂食 / 外带</b>：%s' % parts
+        if len(r["channel_mix"]) == 1:
+            foot += '<br><span class="dim">本次样本里点餐方式只有一个取值，' \
+                    '该维度的比较意义有限。</span>'
+
     return sec_bars(
         "点餐方式 · 你更常怎么吃",
         "五种点餐场景的订单占比。到店取餐 / 麦乐送 / 得来速 / 堂食外带 / 企业团餐。",
         rows,
         lambda x: "%d 单 · %s · %s" % (x["_o"], pct(x["_s"]), money(x["_y"])),
+        foot=foot,
     )
 
 
@@ -378,35 +406,56 @@ def sec_geo(r):
     return "".join(out)
 
 
-def sec_mealcard(r):
-    m = r["mealcard"]
+def sec_discount(r):
+    d = r["discount_ledger"]
     out = ['<div class="panel ledger">']
-    out.append('<h2><span class="dot"></span>麦金卡账本</h2>')
-    if not m.get("has_card"):
-        out.append('<div class="sub">本次返回的订单中未见麦金卡权益记录。</div>')
-        out.append('<div class="verdict">%s</div>' % esc(m.get("note", "")))
-        out.append('</div>')
-        return "".join(out)
+    out.append('<h2><span class="dot"></span>优惠账本</h2>')
+    out.append('<div class="sub">这一节回答的不是「卡值不值」，而是「省下的钱从哪来」：'
+               '原价多少、实付多少、差额由哪几张券贡献。'
+               '接口不返回持卡标识，因此不区分麦金卡/非麦金卡订单。</div>')
 
-    good = m["net_yuan"] >= 0
-    out.append('<div class="sub">持卡月数按「首笔用卡订单所在月 → 末笔订单所在月」的自然月数估算，'
-               '月费取 %s/月。' % money(m["monthly_fee_yuan"]))
-    out.append('</div>')
     out.append('<div class="ledger-grid">')
-    out.append('<div><div class="k">累计节省</div><div class="v">%s</div></div>' % money(m["saved_yuan"]))
-    out.append('<div><div class="k">持卡月数</div><div class="v">%d 个月</div></div>' % m["months_held"])
-    out.append('<div><div class="k">月费成本</div><div class="v">%s</div></div>' % money(m["cost_yuan"]))
-    out.append('<div><div class="k">净收益</div><div class="v %s">%s%s</div></div>'
-               % ("good" if good else "bad", "" if good else "-", money(abs(m["net_yuan"]))))
+    out.append('<div><div class="k">折前原价</div><div class="v">%s</div></div>'
+               % money(d["original_yuan"]))
+    out.append('<div><div class="k">实际支付</div><div class="v">%s</div></div>'
+               % money(d["paid_yuan"]))
+    out.append('<div><div class="k">累计省下</div><div class="v good">%s</div></div>'
+               % money(d["saved_yuan"]))
+    out.append('<div><div class="k">节省比例</div><div class="v">%.1f%%</div></div>'
+               % ((d["save_rate"] or 0) * 100))
     out.append('</div>')
-    if good:
-        out.append('<div class="verdict">结论：省下的钱是月费成本的 <b>%.2f 倍</b>，'
-                   '这张卡在这段时间里是<b>赚的</b>。用卡订单 %d 单，未用卡 %d 单。</div>'
-                   % (m["roi"] or 0, m["card_orders"], m["plain_orders"]))
-    else:
-        out.append('<div class="verdict">结论：目前节省尚未覆盖月费，还差 <b>%s</b>。'
-                   '用卡订单 %d 单，未用卡 %d 单。</div>'
-                   % (money(abs(m["net_yuan"])), m["card_orders"], m["plain_orders"]))
+
+    if d["top_coupons"]:
+        out.append('<div class="cp-title">券的贡献</div>')
+        out.append('<div class="cp-list">')
+        top_amt = d["top_coupons"][0]["saved_yuan"] or 1
+        for c in d["top_coupons"]:
+            w = max(2.0, min(100.0, (c["saved_yuan"] / top_amt) * 100))
+            out.append('<div class="cp"><div class="cp-n">%s</div>'
+                       '<div class="cp-bar"><i style="width:%.1f%%"></i></div>'
+                       '<div class="cp-v">%d 次 · %s</div></div>'
+                       % (esc(c["name"]), w, c["times"], money(c["saved_yuan"])))
+        out.append('</div>')
+
+    if d["best_saving"]:
+        b = d["best_saving"]
+        orig = b.get("original_yuan") or 0
+        fold = ((b["paid_yuan"] or 0) / orig * 10) if orig else None
+        if fold and fold < 9.95:
+            out.append('<div class="verdict">省钱最多的一单是 <b>%s</b> 在「%s」：'
+                       '原价 <b>%s</b> → 只花了 <b>%s</b>，省下 <b>%s</b>，'
+                       '相当于 <b>%.1f</b> 折。</div>'
+                       % (b["date"], esc(b["store_name"]), money(orig),
+                          money(b["paid_yuan"]), money(b["saved_yuan"]), fold))
+        else:
+            out.append('<div class="verdict">省钱最多的一单是 <b>%s</b> 在「%s」：'
+                       '只花了 <b>%s</b>，省下 <b>%s</b>。</div>'
+                       % (b["date"], esc(b["store_name"]), money(b["paid_yuan"]),
+                          money(b["saved_yuan"])))
+    if d["no_coupon_orders"]:
+        no_rate = (1 - (d["coupon_order_rate"] or 0)) * 100
+        out.append('<div class="verdict">%d 单没用券，占 <b>%.0f%%</b>。</div>'
+                   % (d["no_coupon_orders"], no_rate))
     out.append('</div>')
     return "".join(out)
 
@@ -508,18 +557,15 @@ def share_card_inner(r):
                        % (i + 1, esc(t["name"]), t["quantity"], t["orders"]))
         out.append('</div></div>')
 
-    # 麦金卡
-    m = r["mealcard"]
-    if m.get("has_card"):
-        good = m["net_yuan"] >= 0
+    # 优惠账本
+    d = r["discount_ledger"]
+    if d["saved_yuan"] > 0:
         out.append('<div class="sc-ledger">')
-        out.append('<div><div class="t">持卡 %d 个月，省下</div>'
-                   '<div class="m"><b>%s</b></div></div>' % (m["months_held"], money(m["saved_yuan"])))
-        if good:
-            out.append('<div class="r">净赚<b>%s</b>%.2f 倍回本</div>'
-                       % (money(m["net_yuan"]), m["roi"] or 0))
-        else:
-            out.append('<div class="r">距离回本还差<b>%s</b>继续薅</div>' % money(abs(m["net_yuan"])))
+        out.append('<div><div class="t">累计省下</div>'
+                   '<div class="m"><b>%s</b></div></div>' % money(d["saved_yuan"]))
+        out.append('<div class="r">原价 %s · 实付 %s<br>节省 <b>%.0f%%</b></div>'
+                   % (money(d["original_yuan"]), money(d["paid_yuan"]),
+                      (d["save_rate"] or 0) * 100))
         out.append('</div>')
 
     out.append('<div class="sc-foot"><span>数据源：麦当劳中国 MCP · order-list</span>'
@@ -570,7 +616,7 @@ def build_html(r):
     out.append('<div class="eyebrow">McDonald\'s China MCP · Footprint</div>')
     out.append('<h1>我的<span class="accent">麦当劳足迹</span></h1>')
     out.append('<p class="lede">把 <b>%d 笔</b>真实订单，变成一张消费画像——'
-               '在哪吃、什么时候吃、怎么点、爱吃什么、麦金卡值不值。'
+               '在哪吃、什么时候吃、怎么点、爱吃什么、省下的钱从哪来。'
                '数据全部来自你本人的麦当劳 MCP 订单，不联网、不上传。</p>' % s["order_count"])
     out.append('</div>')
 
@@ -582,7 +628,7 @@ def build_html(r):
                % money(s["total_yuan"]))
     out.append('<div class="cell"><div class="num">%d<small>城 %d 店</small></div>'
                '<div class="cap">足迹覆盖</div></div>' % (s["city_count"], s["store_count"]))
-    out.append('<div class="cell"><div class="num">%s</div><div class="cap">麦金卡累计省下</div></div>'
+    out.append('<div class="cell"><div class="num">%s</div><div class="cap">优惠累计省下</div></div>'
                % money(s["saved_yuan"]))
     out.append('</div>')
 
@@ -602,7 +648,7 @@ def build_html(r):
     out.append(sec_categories(r))
     out.append(sec_top_items(r))
     out.append(sec_geo(r))
-    out.append(sec_mealcard(r))
+    out.append(sec_discount(r))
     out.append(sec_notes(r))
     out.append(sec_share_card(r))
 

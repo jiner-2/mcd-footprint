@@ -58,10 +58,14 @@ CATEGORY_RULES = [
     ("早餐", ["麦满分", "满福堡", "热香饼", "薯饼", "早餐", "油条", "蛋堡", "粥"]),
     ("汉堡", ["巨无霸", "麦辣鸡腿汉堡", "板烧", "麦香鸡", "吉士", "安格斯", "鳕鱼",
               "不素之霸", "虾堡", "脆汁鸡", "双牛", "汉堡", "堡"]),
-    ("咖啡", ["麦咖啡", "拿铁", "美式", "卡布", "摩卡", "澳白", "浓缩", "冷萃"]),
+    ("咖啡", ["麦咖啡", "咖啡", "拿铁", "美式", "卡布", "摩卡", "澳白", "浓缩", "冷萃"]),
     ("冰品甜点", ["新地", "麦旋风", "圆筒", "冰淇淋", "冰激凌", "甜筒", "圣代", "蛋糕", "派"]),
-    ("小食", ["薯条", "麦乐鸡", "鸡块", "鸡翅", "香骨鸡", "玉米杯", "苹果片", "沙拉", "扭扭"]),
+    ("小食", ["薯条", "麦乐鸡", "鸡块", "鸡翅", "翅", "香骨鸡", "玉米杯", "苹果片",
+              "沙拉", "扭扭", "鸡排", "鸡腿"]),
     ("饮料", ["可乐", "雪碧", "芬达", "橙汁", "柠檬茶", "冰红茶", "豆浆", "矿泉水", "果汁", "茶"]),
+    # 配料/自定义项：这些不该算进「其他」，否则「其他」会被调味包撑起来，
+    # 让真正的未归类商品藏在一个虚高的数字后面
+    ("配料", ["奶油球", "白砂糖", "糖浆", "酱", "餐具", "打包费", "配送费"]),
 ]
 DEFAULT_CATEGORY = "其他"
 
@@ -71,9 +75,6 @@ MUNICIPALITIES = ["北京市", "上海市", "天津市", "重庆市"]
 # --- 样本量阈值 ---
 MIN_SAMPLE_OK = 15   # 低于此值：分布类结论稳定性有限
 MIN_SAMPLE_HARD = 5  # 低于此值：不足以支撑分布类结论
-
-# --- 默认麦金卡月费（分） ---
-DEFAULT_CARD_FEE_FEN = 1900
 
 # ============================================================
 # 基础工具
@@ -170,7 +171,7 @@ def load_orders(path):
 # ============================================================
 
 
-def build_report(orders, card_start=None, card_fee_fen=DEFAULT_CARD_FEE_FEN, source_meta=None):
+def build_report(orders, source_meta=None):
     warnings = []
     parsed = []
 
@@ -187,11 +188,20 @@ def build_report(orders, card_start=None, card_fee_fen=DEFAULT_CARD_FEE_FEN, sou
         store = o.get("store", {}) or {}
         address = store.get("address", "")
         province, city, district = parse_location(address)
+        city_source = "地址文本" if city else ""
+        # 实测 storeAddress 不含城市（如「东山街道玖力大厦…」），城市只出现在门店名里
+        # （「麦当劳南京万泰路得来速餐厅」）。地址解析不出时用门店名切出的城市兜底，
+        # 并在口径里标明来源，不把两种来源混为一谈。
+        if not city:
+            hint = (store.get("city_hint") or "").strip()
+            if hint:
+                city = hint
+                city_source = "门店名前缀"
         if not city:
             warnings.append({
                 "level": "warn",
-                "message": "订单 %s 的门店地址无法解析出城市：%r。该单不计入城市维度。"
-                           % (o.get("order_id", "#%d" % idx), address),
+                "message": "订单 %s 的门店地址无法解析出城市（地址 %r），门店名也切不出城市。"
+                           "该单不计入城市维度。" % (o.get("order_id", "#%d" % idx), address),
             })
 
         items = o.get("items", []) or []
@@ -232,16 +242,19 @@ def build_report(orders, card_start=None, card_fee_fen=DEFAULT_CARD_FEE_FEN, sou
             "order_id": o.get("order_id", ""),
             "dt": dt,
             "channel": o.get("channel", "未知"),
+            "takeway": o.get("takeway", "未知"),
             "store_code": store.get("store_code", ""),
             "store_name": store.get("store_name", ""),
             "address": address,
             "province": province,
             "city": city,
+            "city_source": city_source,
             "district": district,
             "items": norm_items,
             "subtotal_fen": calc_subtotal,
             "discount_fen": discount,
             "total_fen": total,
+            "coupons": o.get("coupons") or [],
             "meal_card": o.get("meal_card") or None,
         })
 
@@ -398,39 +411,71 @@ def build_report(orders, card_start=None, card_fee_fen=DEFAULT_CARD_FEE_FEN, sou
         "max_city_orders": max((c["orders"] for c in city_list), default=0),
     }
 
-    # ---------- 麦金卡账本 ----------
-    card_orders = [p for p in parsed if p["meal_card"] and p["meal_card"].get("applied")]
-    mealcard = None
-    if card_orders:
-        card_saved = sum(int((p["meal_card"] or {}).get("saved_fen", 0) or 0) for p in card_orders)
-        card_times = sorted(p["dt"] for p in card_orders)
-        first_card = card_times[0]
-        last_time = times[-1] if times else first_card
-        months = (last_time.year - first_card.year) * 12 + (last_time.month - first_card.month) + 1
-        months = max(months, 1)
-        cost_fen = months * card_fee_fen
-        net_fen = card_saved - cost_fen
-        mealcard = {
-            "has_card": True,
-            "card_name": (card_orders[0]["meal_card"] or {}).get("card_name", "麦金卡"),
-            "first_card_order": first_card.strftime("%Y-%m-%d"),
-            "months_held": months,
-            "monthly_fee_yuan": to_yuan(card_fee_fen),
-            "cost_yuan": to_yuan(cost_fen),
-            "saved_yuan": to_yuan(card_saved),
-            "net_yuan": to_yuan(net_fen),
-            "roi": round(card_saved / cost_fen, 2) if cost_fen else None,
-            "card_orders": len(card_orders),
-            "plain_orders": n - len(card_orders),
-            "note": "持卡月数按「首笔用卡订单所在月 → 末笔订单所在月」的自然月数估算，"
-                    "月费取默认值，可在参数中调整。",
-        }
-    else:
-        mealcard = {
-            "has_card": False,
-            "note": "本次返回的订单中未见麦金卡权益记录。可能是未持卡，"
-                    "也可能是官方 order-list 未回传该字段（该字段的可见性需以实际返回为准）。",
-        }
+    # ---------- 优惠账本 ----------
+    #
+    # 原设计是「麦金卡账本」。2026-10-18 拿到真实 Token 后确认：
+    # order-list 与 query-order 的返回里**没有任何持卡标识字段**
+    # （对 10 单真实返回全量搜索 card / 麦金 / 会员 / vip，零命中），
+    # 该维度无法支撑，硬做只能编。
+    #
+    # 所以换成同位置、同目的、但真实可算的「优惠账本」：
+    # 原价 → 实付 → 省下的钱到底来自哪张券。数据全部来自 query-order 的
+    # totalAmount / realTotalAmount / totalDiscountAmount / couponList。
+    original_fen = sum(p["subtotal_fen"] for p in parsed)
+    paid_fen = sum(p["total_fen"] for p in parsed)
+    saved_fen = sum(p["discount_fen"] for p in parsed)
+    coupon_orders = [p for p in parsed if p["coupons"]]
+    no_coupon_orders = n - len(coupon_orders)
+
+    coupon_name_qty = Counter()
+    coupon_name_amt = Counter()
+    for p in parsed:
+        for c in p["coupons"]:
+            coupon_name_qty[c["name"]] += 1
+            coupon_name_amt[c["name"]] += int(c.get("amount_fen", 0) or 0)
+    top_coupons = [{
+        "name": nm,
+        "times": coupon_name_qty[nm],
+        "saved_yuan": to_yuan(coupon_name_amt[nm]),
+    } for nm in sorted(coupon_name_qty,
+                       key=lambda x: (-coupon_name_amt[x], -coupon_name_qty[x]))[:8]]
+
+    best = max(parsed, key=lambda p: p["discount_fen"]) if parsed else None
+    discount_ledger = {
+        "original_yuan": to_yuan(original_fen),
+        "paid_yuan": to_yuan(paid_fen),
+        "saved_yuan": to_yuan(saved_fen),
+        "save_rate": round(saved_fen / original_fen, 4) if original_fen else None,
+        "avg_paid_yuan": to_yuan(paid_fen // n) if n else 0,
+        "coupon_orders": len(coupon_orders),
+        "no_coupon_orders": no_coupon_orders,
+        "coupon_order_rate": round(len(coupon_orders) / n, 4) if n else None,
+        "top_coupons": top_coupons,
+        "best_saving": None if not best else {
+            "date": best["dt"].strftime("%Y-%m-%d"),
+            "store_name": best["store_name"],
+            "original_yuan": to_yuan(best["subtotal_fen"] or 0),
+            "saved_yuan": to_yuan(best["discount_fen"]),
+            "paid_yuan": to_yuan(best["total_fen"]),
+            "save_rate": (round(best["discount_fen"] / best["subtotal_fen"], 4)
+                          if best["subtotal_fen"] else None),
+        },
+        "note": "省下的钱来自订单返回的优惠金额合计（totalDiscountAmount），"
+                "券名来自 couponList。接口不返回持卡标识，故本维度不区分麦金卡/非麦金卡。",
+    }
+
+    # ---------- 堂食 / 外带 ----------
+    tw_counter = Counter()
+    tw_spend = Counter()
+    for p in parsed:
+        tw_counter[p["takeway"]] += 1
+        tw_spend[p["takeway"]] += p["total_fen"]
+    takeway_mix = [{
+        "takeway": tw,
+        "orders": cnt,
+        "spend_yuan": to_yuan(tw_spend[tw]),
+        "share": round(cnt / n, 4) if n else 0,
+    } for tw, cnt in tw_counter.most_common()]
 
     # ---------- 自动洞察 ----------
     highlights = []
@@ -452,15 +497,18 @@ def build_report(orders, card_start=None, card_fee_fen=DEFAULT_CARD_FEE_FEN, sou
     if top_items:
         highlights.append("点得最多的单品是「%s」，累计 %d 份。"
                           % (top_items[0]["name"], top_items[0]["quantity"]))
-    if mealcard and mealcard.get("has_card"):
-        if mealcard["net_yuan"] >= 0:
-            highlights.append("持卡 %d 个月，累计省下 %s 元，扣掉 %s 元月费后净赚 %s 元（%.2f 倍回本）。"
-                              % (mealcard["months_held"], mealcard["saved_yuan"],
-                                 mealcard["cost_yuan"], mealcard["net_yuan"], mealcard["roi"]))
-        else:
-            highlights.append("持卡 %d 个月，累计省下 %s 元，仍未覆盖 %s 元月费，净支出 %s 元。"
-                              % (mealcard["months_held"], mealcard["saved_yuan"],
-                                 mealcard["cost_yuan"], abs(mealcard["net_yuan"])))
+    if discount_ledger["saved_yuan"] > 0:
+        highlights.append("原价 %.2f 元、实付 %.2f 元，一共省下 %.2f 元（%.0f%%）。"
+                          % (discount_ledger["original_yuan"], discount_ledger["paid_yuan"],
+                             discount_ledger["saved_yuan"],
+                             (discount_ledger["save_rate"] or 0) * 100))
+        if discount_ledger["top_coupons"]:
+            t = discount_ledger["top_coupons"][0]
+            highlights.append("最值钱的一张券是「%s」，用过 %d 次，省下 %.2f 元。"
+                              % (t["name"], t["times"], t["saved_yuan"]))
+    if takeway_mix and len(takeway_mix) > 1:
+        highlights.append("用餐方式以「%s」为主，占 %.0f%%。"
+                          % (takeway_mix[0]["takeway"], takeway_mix[0]["share"] * 100))
 
     # ---------- 口径元信息 ----------
     meta = {
@@ -472,9 +520,14 @@ def build_report(orders, card_start=None, card_fee_fen=DEFAULT_CARD_FEE_FEN, sou
         "coverage_note": "官方 order-list 仅返回近期订单，不是全年完整历史；"
                          "本报告的分布结论仅代表该样本区间。",
         "timezone_note": "order-list 返回的下单时间字段不含时区，本报告统一按 UTC+8 解释。",
-        "amount_note": "接口金额原始单位为分，本报告已统一换算为元（保留两位小数）。",
+        "amount_note": "order-list / query-order 返回的金额是**元**且为字符串（如 \"14.9\"），"
+                       "不是分；本报告内部统一折算为分计算，展示时再换回元。"
+                       "菜单类接口（query-meals 等）的金额单位不同，不要混用。",
         "category_note": "品类由商品名称关键词启发式归类，非麦当劳官方分类。",
-        "city_note": "城市与区由门店地址文本解析，官方不返回结构化城市字段，也不返回经纬度。",
+        "city_note": "官方不返回城市字段与经纬度。城市优先由门店地址文本解析，"
+                     "地址不含城市时改用门店名（如「麦当劳南京万泰路…」）前缀匹配内置城市表；"
+                     "两者都拿不到时留空，不猜。",
+        "combo_note": "套餐商品已展开为子项归类，子项金额按数量均摊，合计与套餐价一致。",
         "slot_note": "时段划分：深夜 00:00-05:59 / 早餐 06:00-10:29 / 午市 10:30-13:59 / "
                      "下午茶 14:00-16:59 / 晚市 17:00-20:59 / 夜宵 21:00-23:59。",
     }
@@ -493,10 +546,11 @@ def build_report(orders, card_start=None, card_fee_fen=DEFAULT_CARD_FEE_FEN, sou
         "weekday_mix": weekday_mix,
         "monthly": monthly,
         "channel_mix": channel_mix,
+        "takeway_mix": takeway_mix,
         "category_mix": category_mix,
         "top_items": top_items,
         "geo": geo,
-        "mealcard": mealcard,
+        "discount_ledger": discount_ledger,
         "warnings": warnings,
     }
 
@@ -511,10 +565,6 @@ def main():
         description="把麦当劳 MCP 历史订单聚合成消费足迹五维数据")
     ap.add_argument("--input", required=True, help="规范化订单 JSON 路径")
     ap.add_argument("--output", required=True, help="聚合结果 JSON 输出路径")
-    ap.add_argument("--card-start", default=None,
-                    help="麦金卡起始月（YYYY-MM），仅用于覆盖自动推算，一般无需指定")
-    ap.add_argument("--card-fee-fen", type=int, default=DEFAULT_CARD_FEE_FEN,
-                    help="麦金卡月费（分），默认 1900 即 19 元/月")
     args = ap.parse_args()
 
     if not os.path.exists(args.input):
@@ -522,8 +572,7 @@ def main():
         return 2
 
     source_meta, orders = load_orders(args.input)
-    report = build_report(orders, card_start=args.card_start,
-                          card_fee_fen=args.card_fee_fen, source_meta=source_meta)
+    report = build_report(orders, source_meta=source_meta)
 
     out_dir = os.path.dirname(os.path.abspath(args.output))
     if out_dir and not os.path.isdir(out_dir):
