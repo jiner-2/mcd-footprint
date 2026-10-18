@@ -56,7 +56,25 @@ agent_created: true
 
 ### 3. 规范化（关键步骤）
 
-把官方返回转成本 skill 的输入格式。**字段名以实际返回为准**，按下表映射：
+把官方返回转成本 skill 的输入格式。**先跑脚本，不要手工搬字段**：
+
+```bash
+# 拿到真实返回后，第一件事：把实际字段名探出来
+python scripts/normalize_orders.py --input orders-raw.json --dump-keys
+
+# 再规范化（--input 可以是单个文件，也可以是存放多次返回的目录）
+python scripts/normalize_orders.py --input orders-raw.json --output orders.json
+```
+
+脚本按「结构特征」识别订单对象（有时间 + 有明细即视为订单），再在对象内部按别名表取字段，
+因此外层包成 `data.list` / `records` / 直接数组都能吃；金额单位按**每个文件独立判定**，
+并自动去重（`order-list` 与 `query-order` 常有交叠）。
+
+- 若 stdout 报「没有识别出订单对象」→ 先看 `--dump-keys` 的实际键名，再把键补进
+  `scripts/normalize_orders.py` 顶部的 `ALIASES`，**不要手工编一份 JSON 绕过去**。
+- 若报「疑似金额单位判定有误」→ 用 `--amount-unit fen|yuan` 显式指定后重跑。
+
+输出格式（也就是下游聚合器的输入契约）：
 
 ```json
 {
@@ -84,7 +102,7 @@ agent_created: true
 }
 ```
 
-映射时必须守住的四条规则：
+只有脚本识别不了、必须手工补字段时，才按下表守住四条规则：
 
 | 规则 | 说明 |
 |---|---|
@@ -98,7 +116,7 @@ agent_created: true
 ### 4. 聚合
 
 ```bash
-python scripts/footprint_aggregate.py --input orders-raw.json --output footprint.json
+python scripts/footprint_aggregate.py --input orders.json --output footprint.json
 ```
 
 脚本输出五维聚合结果与口径元信息。**检查 stdout 里的告警条数**：
@@ -148,5 +166,6 @@ python scripts/render_report.py --input footprint.json --output report.html --ca
 - `references/playbooks.md` —— 完整调用序列与失败分支
 - `references/metrics.md` —— **五维口径定义**（每个数字怎么算出来的）
 - `references/pitfalls.md` —— 实测踩坑：无坐标、仅近期订单、无时区、分→元、字段可见性
+- `scripts/normalize_orders.py` —— MCP 原始返回 → 规范化订单（含 `--dump-keys` 字段探测）
 - `scripts/footprint_aggregate.py` —— 五维聚合器
 - `scripts/render_report.py` —— HTML 报告 + 分享卡渲染器
