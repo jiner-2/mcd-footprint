@@ -1,10 +1,14 @@
+<p align="center">
+  <img src="docs/banner.png" width="100%" alt="麦麦足迹 mcd-footprint：把你吃过的麦当劳变成一张回忆地图">
+</p>
+
 <div align="center">
 
 # 麦麦足迹 · mcd-footprint
 
 ### Spotify Wrapped，但是你的麦当劳。
 
-不用手工记，不用翻截图 —— 把你**已有的订单**直接变成五维消费画像。
+不用手工记，不用翻截图 —— 把你**已有的订单**直接变成一张回忆地图。
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-f0b429.svg)
 
@@ -17,12 +21,6 @@
 ![Deps](https://img.shields.io/badge/%E9%9B%B6%E5%A4%96%E9%83%A8%E4%BE%9D%E8%B5%96-2f7a4d)
 
 </div>
-
-<p align="center">  
-  <img src="docs/preview-card.png" width="360" alt="麦麦足迹分享卡：一次生成，直接发朋友圈">  
-</p>
-
-<p align="center"><sub>↑ 一张 1080×1920 的分享卡，自动生成 · 数据全程不出本机</sub></p>
 
 <p align="center">  
 <b>5 个维度</b>　·　<b>1 份 HTML 报告</b>　·　<b>0 次上传</b>  
@@ -67,7 +65,7 @@ git clone https://github.com/jiner-2/mcd-footprint.git
 | 💳 **麦金卡账本** | 省下的钱 vs 月费成本 —— 这张卡到底值不值            |
 
 <p align="center">  
-  <img src="docs/preview-report.png" width="760" alt="麦麦足迹消费画像报告预览">  
+  <img src="docs/preview-report.png" width="760" alt="麦麦足迹回忆地图报告预览">  
 </p>
 
 <p align="center"><sub>报告全貌：洞察摘要、时间热力矩阵、月度节律、点餐方式、品类结构、城市足迹、麦金卡账本、口径声明</sub></p>
@@ -150,6 +148,26 @@ Python 3.9+，**不需要任何第三方库** —— 只用标准库。
 
 Skill 会自动拉取订单 → 聚合五维 → 渲染报告与分享卡 → 把文件路径交给你。
 
+**想自己手动跑一遍（用真实订单）**，就三步：
+
+```bash
+# 1. 把 MCP 的 order-list / query-order 返回存成文件（或整个目录）
+#    先探一下官方到底返回了哪些字段，再规范化
+python scripts/normalize_orders.py --input raw/ --dump-keys
+python scripts/normalize_orders.py --input raw/ --output orders.json
+
+# 2. 聚合五维
+python scripts/footprint_aggregate.py --input orders.json --output footprint.json
+
+# 3. 渲染报告与分享卡
+python scripts/render_report.py --input footprint.json \
+  --output report.html --card-output card.html
+```
+
+`normalize_orders.py` 按结构特征识别订单对象（有时间 + 有明细即视为订单），
+不依赖固定外层包装；金额单位按每个文件独立判定，并自动去掉 `order-list` 与
+`query-order` 的重复单。字段名万一变了，补进脚本顶部的 `ALIASES` 即可，不用改逻辑。
+
 **不用 Token 也能先跑**（仓库自带脱敏样例）：
 
 ```bash
@@ -170,10 +188,16 @@ python scripts/render_report.py \
 ## 分享卡
 
 <p align="center">  
-  <img src="docs/preview-detail.png" width="700" alt="报告细节：城市足迹与麦金卡账本">  
+  <img src="docs/preview-card.png" width="340" alt="麦麦足迹分享卡：一次生成，直接发朋友圈">  
 </p>
 
+<p align="center"><sub>↑ 一张 1080×1920 的分享卡，自动生成 · 数据全程不出本机</sub></p>
+
 报告和分享卡都是**单文件 HTML**，内联样式、零外部依赖、离线可打开。分享卡按 1080×1920（9:16 手机全屏）排版，打开即整卡，直接截图或长按保存。
+
+<p align="center">  
+  <img src="docs/preview-detail.png" width="700" alt="报告细节：城市足迹与麦金卡账本">  
+</p>
 
 ---
 
@@ -188,6 +212,7 @@ mcd-footprint/
 │   ├── metrics.md                    # ★ 五维口径定义：每个数字怎么算出来的
 │   └── pitfalls.md                   # 实测踩坑清单
 ├── scripts/
+│   ├── normalize_orders.py           # MCP 原始返回 → 规范化订单（含字段探测）
 │   ├── footprint_aggregate.py        # 五维聚合器
 │   └── render_report.py              # HTML 报告 + 分享卡渲染器
 ├── examples/                         # 脱敏示例数据与生成物
