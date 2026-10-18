@@ -310,6 +310,7 @@ mcd-footprint/
 
 - 官方活动仓库：[M-China/mcd-developer-innovation-challenge](https://github.com/M-China/mcd-developer-innovation-challenge)
 - MCP 服务：<https://open.mcd.cn/mcp>
+- MCP 接入与使用遵循[《麦当劳 MCP 服务规则》](https://cdn.mcd.cn/cms/pages/MCPServerRules.html)
 - 本项目**非**麦当劳官方产品，与麦当劳中国无隶属关系
 - 麦当劳、「麦当劳」及金拱门标识为麦当劳公司的注册商标
 
